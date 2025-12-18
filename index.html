@@ -278,16 +278,8 @@
       line-height: 1.55;
     }
 
-    .tile-detail{
-      position: absolute;
-      inset: 0;
-      padding: 1.35rem;
-      background: rgba(8,18,40,0.96);
-      border: 1px solid rgba(102,126,234,0.22);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity .18s ease, transform .18s ease;
-    }
+ .tile-detail{ display:none !important; }
+
 
     .hover-tile:hover .tile-detail,
     .hover-tile:focus-within .tile-detail{
@@ -765,6 +757,7 @@
       flex-wrap: wrap;
     }
 
+
     /* ============================
        RESPONSIVE
     ============================= */
@@ -808,23 +801,94 @@
       .testimonial-inner{ padding: 2rem 1.5rem; }
       .author-image{ width: 42px; height: 42px; }
     }
+
+    /* hamburger hidden on desktop */
+.nav-toggle { display: none; }
+.nav-burger { display: none; cursor: pointer; }
+
+.nav-burger span{
+  display:block;
+  width: 22px;
+  height: 2px;
+  background: rgba(255,255,255,0.85);
+  margin: 5px 0;
+  border-radius: 2px;
+}
+
+/* Mobile nav */
+@media (max-width: 900px){
+  .nav-inner{
+    padding: 1rem 1.25rem;
+    position: relative;
+  }
+
+  .nav-burger{
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* hide links by default */
+  .nav-links{
+    display: none;
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 1.25rem;
+    right: 1.25rem;
+    padding: 1rem;
+    gap: 0.75rem;
+    background: rgba(10, 22, 40, 0.98);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 14px;
+    flex-direction: column;
+    align-items: stretch;
+    backdrop-filter: blur(10px);
+  }
+
+  /* open when toggled */
+  .nav-toggle:checked ~ .nav-links{
+    display: flex;
+  }
+
+  .nav-links a{
+    padding: 0.6rem 0.5rem;
+  }
+
+  /* make CTA full width on mobile */
+  .nav-links .cta-button{
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* IMPORTANT: adjust hero top padding so it never sits under nav */
+  .hero-wrap{ padding-top: 84px; } /* adjust if your nav height differs */
+}
+
   </style>
 </head>
 
 <body>
   <!-- NAV -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <div class="logo">Persisto</div>
-      <div class="nav-links">
-        <a href="#platform">Platform</a>
-        <a href="#solutions">Solutions</a>
-        <a href="#resources">Resources</a>
-        <a href="#about">About</a>
-        <button class="cta-button">Request an Executive Briefing</button>
-      </div>
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="logo">Persisto</div>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Open menu" />
+    <label for="nav-toggle" class="nav-burger" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </label>
+
+    <div class="nav-links">
+      <a href="#platform">Platform</a>
+      <a href="#solutions">Solutions</a>
+      <a href="#resources">Resources</a>
+      <a href="#about">About</a>
+      <button class="cta-button">Request an Executive Briefing</button>
     </div>
-  </nav>
+  </div>
+</nav>
+
 
   <!-- HERO -->
   <div class="hero-wrap">
@@ -842,7 +906,7 @@
 
           <div class="hero-buttons">
             <button class="cta-button">Request an Executive Briefing</button>
-            <button class="secondary-button">View 3-minute Overview</button>
+    
           </div>
         </div>
 
@@ -872,36 +936,18 @@
             <div class="tile-kicker">↗</div>
             <div class="tile-title">Complexity increases</div>
             <div class="tile-micro">Risk evaluation now spans more information, exceptions, and judgment than teams can consistently absorb.</div>
-
-            <div class="tile-detail">
-              <div class="tile-kicker">↗</div>
-              <div class="tile-title">Complexity increases</div>
-              <p>Risk evaluation now spans more information, exceptions, and judgment than teams can consistently absorb.</p>
-            </div>
           </div>
 
           <div class="hover-tile" tabindex="0">
             <div class="tile-kicker">≈</div>
             <div class="tile-title">Decisions diverge</div>
             <div class="tile-micro">Similar risks are evaluated differently across people, time, and pressure—often without visibility.</div>
-
-            <div class="tile-detail">
-              <div class="tile-kicker">≈</div>
-              <div class="tile-title">Decisions diverge</div>
-              <p>Similar risks are evaluated differently across people, time, and pressure—often without visibility.</p>
-            </div>
           </div>
 
           <div class="hover-tile" tabindex="0">
             <div class="tile-kicker">∑</div>
             <div class="tile-title">Outcomes drift</div>
             <div class="tile-micro">Portfolio performance becomes shaped by decision patterns that leadership cannot easily see or steer.</div>
-
-            <div class="tile-detail">
-              <div class="tile-kicker">∑</div>
-              <div class="tile-title">Outcomes drift</div>
-              <p>Portfolio performance becomes shaped by decision patterns that leadership cannot easily see or steer.</p>
-            </div>
           </div>
 
           <!-- Intentionally leaving a 2x2 grid “breathing space” with 3 tiles.
@@ -938,7 +984,7 @@
   <p class="section-subtitle">
   Persisto operates through a four-part model: ingest, enhance, evaluate, and act—designed to run alongside existing systems and teams.
   </p>
-</div>
+</div> 
 
       <div class="bento-grid">
         <div class="bento-item">
