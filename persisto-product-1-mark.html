@@ -1,0 +1,730 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mark — Submission Intake Engine | Persisto</title>
+
+  <style>
+    :root{
+      --paper: #F0EEE6;
+      --paper2:#F7F5EE;
+      --paper3:#ECE9E0;
+      --ink:   #0B1220;
+      --muted: rgba(11,18,32,.72);
+      --subtle:rgba(11,18,32,.55);
+
+      --stroke: rgba(11,18,32,.12);
+      --stroke2:rgba(11,18,32,.18);
+
+      --tile2: rgba(255,255,255,.86);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2:0 10px 28px rgba(11,18,32,.10);
+
+      --radius: 16px;
+      --radius2:22px;
+      --max: 1120px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing:.2px;
+      line-height:1.45;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(var(--max), calc(100% - 48px)); margin-inline:auto; }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(240,238,230,.78);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap: 10px;
+      font-weight: 850;
+      letter-spacing:.4px;
+      color: var(--ink);
+    }
+    .logo{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(11,18,32,.08), rgba(11,18,32,.02));
+      border: 1px solid var(--stroke);
+    }
+    .navlinks{
+      display:flex; align-items:center; gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      flex-wrap:wrap;
+    }
+    .navlinks a:hover{ color: rgba(11,18,32,.92); }
+    .navcta{ display:flex; gap: 10px; align-items:center; }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke2);
+      background: rgba(255,255,255,.55);
+      color: rgba(11,18,32,.90);
+      font-weight: 850;
+      font-size: 14px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.72);
+      border-color: rgba(11,18,32,.24);
+    }
+    .btn-primary{
+      background: var(--ink);
+      border-color: var(--ink);
+      color: rgba(240,238,230,.95);
+    }
+    .btn-primary:hover{
+      background: rgba(11,18,32,.92);
+      border-color: rgba(11,18,32,.92);
+    }
+
+    /* Section bands + dividers */
+    section{ padding: 84px 0; }
+    .band-1{ background: var(--paper); }
+    .band-2{ background: var(--paper2); box-shadow: inset 0 1px 0 rgba(255,255,255,.75); }
+    .band-3{ background: var(--paper3); box-shadow: inset 0 1px 0 rgba(255,255,255,.75); }
+    .section-divider{
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(11,18,32,.14), transparent);
+    }
+    .anchor{ scroll-margin-top: 88px; }
+
+    /* Typographic system */
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.55);
+      color: rgba(11,18,32,.78);
+      font-weight: 850;
+      font-size: 12px;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+    h1{
+      margin: 16px 0 0;
+      font-size: clamp(36px, 4.0vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.95px;
+    }
+    h2{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 2.4vw, 34px);
+      letter-spacing: -0.6px;
+      line-height: 1.12;
+    }
+    .lede{
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 82ch;
+    }
+    .section-head{
+      text-align: center;
+      margin-bottom: 26px;
+      display:flex;
+      justify-content:center;
+    }
+    .section-head > div{ max-width: 82ch; }
+
+    /* Layout */
+    .hero{ padding-top: 58px; padding-bottom: 72px; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 34px;
+      align-items:center;
+    }
+    .hero-actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 18px;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* Tiles */
+    .tile{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,18,32,.14);
+      background: var(--tile2);
+      box-shadow: var(--shadow2);
+      padding: 18px;
+      position: relative;
+      overflow:hidden;
+    }
+    .tile:before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+      opacity: .9;
+    }
+    .tile h3{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Icon frame for problem cards */
+    .icon-frame{
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(240,238,230,.70);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom: 12px;
+      overflow:hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .icon-frame svg{ width: 100%; height: 100%; }
+
+    /* Media placeholder */
+    .media-frame{
+      position: relative;
+      border-radius: 18px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.56));
+      box-shadow: var(--shadow2);
+      overflow: hidden;
+      isolation: isolate;
+      min-height: 410px;
+    }
+    .media-frame img{
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      opacity: .98;
+    }
+    .media-label{
+      position: absolute;
+      inset: auto 14px 14px 14px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(240,238,230,.86);
+      color: rgba(11,18,32,.72);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .3px;
+      pointer-events: none;
+      width: fit-content;
+      max-width: calc(100% - 28px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* PROBLEM REALITY BAND — editorial split */
+    .fact-band{
+      border-top: 1px solid rgba(11,18,32,.10);
+      border-bottom: 1px solid rgba(11,18,32,.10);
+      background:
+        radial-gradient(900px 320px at 18% -10%, rgba(11,18,32,.08), transparent 60%),
+        radial-gradient(700px 260px at 88% 20%, rgba(15,42,95,.10), transparent 55%),
+        rgba(255,255,255,.66);
+    }
+    .fact-wrap{ padding: 44px 0; }
+    .fact-split{
+      display:grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .fact-rule{
+      background: rgba(11,18,32,.14);
+      border-radius: 999px;
+    }
+    .fact-block{
+      padding: 4px 10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height: 128px;
+    }
+    .fact{
+      font-size: clamp(24px, 2.3vw, 30px);
+      line-height: 1.10;
+      letter-spacing: -0.55px;
+      font-weight: 900;
+      color: rgba(11,18,32,.94);
+      margin: 0;
+    }
+    .source{
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(11,18,32,.52);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    /* CHANGE */
+    .tile-compact h3{ font-size: 15px; }
+    .tile-compact p{ font-size: 14px; }
+
+    /* MEASURE */
+    .measure-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .bullets{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: none;
+    }
+    .bullets li{ margin: 8px 0; }
+
+    .aside{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(240,238,230,.60);
+      padding: 18px;
+    }
+    .aside h3{
+      margin: 0 0 10px;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    /* QUOTE BAND — standalone signature band */
+    .quote-band{
+      background:
+        radial-gradient(1100px 420px at 20% -10%, rgba(11,18,32,.10), transparent 62%),
+        radial-gradient(900px 340px at 85% 10%, rgba(46,111,126,.12), transparent 55%),
+        rgba(255,255,255,.72);
+      border-top: 1px solid rgba(11,18,32,.10);
+      border-bottom: 1px solid rgba(11,18,32,.10);
+    }
+    .quote-wrap{
+      padding: 72px 0;
+      text-align:center;
+    }
+    .quote-big{
+      margin: 0 auto;
+      max-width: 36ch;
+      font-size: clamp(30px, 3.0vw, 44px);
+      line-height: 1.06;
+      letter-spacing: -0.95px;
+      font-weight: 950;
+      color: rgba(11,18,32,.94);
+    }
+    .quote-big .light{
+      font-weight: 850;
+      color: rgba(11,18,32,.86);
+    }
+    .quote-sub{
+      margin: 14px auto 0;
+      max-width: 72ch;
+      color: rgba(11,18,32,.70);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    /* CTA */
+    .cta{
+      border-radius: 26px;
+      border: 1px solid rgba(11,18,32,.20);
+      background:
+        radial-gradient(1100px 380px at 18% -10%, rgba(11,18,32,.09), transparent 60%),
+        radial-gradient(900px 340px at 85% 10%, rgba(46,111,126,.12), transparent 55%),
+        rgba(255,255,255,.86);
+      box-shadow: 0 26px 90px rgba(11,18,32,.14);
+      padding: 44px 34px;
+      text-align:center;
+    }
+    .cta p{
+      margin: 0;
+      color: rgba(11,18,32,.74);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .cta-actions{
+      display:flex;
+      justify-content:center;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 18px;
+    }
+
+    footer{
+      padding: 28px 0 40px;
+      color: var(--subtle);
+      font-size: 13px;
+      border-top: 1px solid var(--stroke);
+      background: var(--paper3);
+    }
+    .foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      flex-wrap:wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .navlinks{ display:none; }
+      .hero-grid{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .fact-split{ grid-template-columns: 1fr; gap: 12px; }
+      .fact-rule{ display:none; }
+      .measure-grid{ grid-template-columns: 1fr; }
+      .media-frame{ min-height: 320px; }
+      .quote-wrap{ padding: 60px 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="topbar">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#top" aria-label="Persisto home">
+          <div class="logo" aria-hidden="true"></div>
+          <div>Persisto</div>
+        </a>
+
+        <nav class="navlinks" aria-label="Product page">
+          <a href="#problem">Problem</a>
+          <a href="#reality">Reality</a>
+          <a href="#change">Change</a>
+          <a href="#measure">Measure</a>
+          <a href="#evaluate">Evaluate</a>
+        </nav>
+
+        <div class="navcta">
+          <a class="btn" href="persisto_platform.html">Platform Overview</a>
+          <a class="btn btn-primary" href="#evaluate">Request a Product Walkthrough</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <main id="top" class="hero band-1">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <span class="kicker">Product</span>
+          <h1>Mark — Submission Intake Engine</h1>
+          <p class="lede">
+            Creates consistent, review-ready case files from fragmented broker submissions.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#evaluate">Request a Product Walkthrough</a>
+            <a class="btn" href="#problem">Why this matters</a>
+          </div>
+        </div>
+
+        <!-- Hero visual placeholder -->
+        <div class="media-frame" aria-label="Mark hero visual placeholder">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Placeholder for Mark intake visual" />
+          <div class="media-label">Placeholder: Mark intake visual</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="section-divider"></div>
+
+  <!-- PROBLEM (vertical cards) -->
+  <section id="problem" class="anchor band-3">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>The problem Mark solves</h2>
+          <p class="lede" style="margin-top:0;">
+            Intake fragmentation forces underwriters to reconcile structure before they can assess risk.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true">
+            <!-- format chaos -->
+            <svg viewBox="0 0 320 52" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <style>
+                  .s0{ stroke: rgba(11,18,32,.44); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+                  .f0{ fill: rgba(11,18,32,.08); }
+                </style>
+              </defs>
+              <rect x="18" y="12" width="64" height="28" rx="8" class="f0" stroke="rgba(11,18,32,.26)" stroke-width="1.4"/>
+              <rect x="96" y="10" width="64" height="32" rx="8" class="f0" stroke="rgba(11,18,32,.22)" stroke-width="1.4"/>
+              <rect x="174" y="14" width="64" height="24" rx="8" class="f0" stroke="rgba(11,18,32,.18)" stroke-width="1.4"/>
+              <path class="s0" d="M64 26h18M142 26h18M220 26h18" opacity=".65"/>
+              <path class="s0" d="M250 14l20 12-20 12" opacity=".6"/>
+            </svg>
+          </div>
+          <h3>Format chaos</h3>
+          <p>Submissions arrive in inconsistent structures across brokers and channels.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true">
+            <!-- manual reconciliation -->
+            <svg viewBox="0 0 320 52" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <style>
+                  .s0{ stroke: rgba(11,18,32,.44); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+                  .f0{ fill: rgba(11,18,32,.08); }
+                </style>
+              </defs>
+              <rect x="22" y="10" width="90" height="32" rx="10" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s0" d="M36 22h56M36 30h44" opacity=".65"/>
+              <rect x="140" y="12" width="70" height="28" rx="10" class="f0" stroke="rgba(11,18,32,.22)" stroke-width="1.4"/>
+              <path class="s0" d="M154 26h42" opacity=".65"/>
+              <path class="s0" d="M114 26h26" opacity=".6"/>
+              <path class="s0" d="M214 26h26" opacity=".6"/>
+              <path class="s0" d="M246 18l16 16M262 18l-16 16" opacity=".45"/>
+            </svg>
+          </div>
+          <h3>Manual reconciliation</h3>
+          <p>Early underwriting effort is spent validating, correcting, and re-keying basics.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true">
+            <!-- decision noise -->
+            <svg viewBox="0 0 320 52" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <style>
+                  .s0{ stroke: rgba(11,18,32,.44); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+                  .s1{ stroke: rgba(11,18,32,.28); stroke-width:1.4; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+                  .f0{ fill: rgba(11,18,32,.08); }
+                </style>
+              </defs>
+              <circle cx="56" cy="26" r="14" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M56 18v10M56 30h0" />
+              <path class="s0" d="M76 26h66" opacity=".6"/>
+              <rect x="152" y="12" width="64" height="28" rx="12" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M166 26h36" opacity=".65"/>
+              <path class="s0" d="M216 26h28" opacity=".6"/>
+              <circle cx="270" cy="20" r="6.5" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <circle cx="286" cy="32" r="6.5" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M270 20l16 12" opacity=".55"/>
+            </svg>
+          </div>
+          <h3>Decision noise</h3>
+          <p>Variance enters before risk appetite and governance can apply consistently.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROBLEM REALITY BAND -->
+  <section id="reality" class="anchor fact-band" aria-label="Industry reality band">
+    <div class="container fact-wrap">
+      <div class="fact-split">
+        <div class="fact-block">
+          <p class="fact">Up to 40% of underwriter time is spent fixing fragmented submissions</p>
+          <div class="source">Sources: WNS Underwriting 2030</div>
+        </div>
+
+        <div class="fact-rule" aria-hidden="true"></div>
+
+        <div class="fact-block">
+          <p class="fact">~50% of underwriters spend 3+ hours/day on manual data entry</p>
+          <div class="source">Sources: Canadian Underwriter</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- CHANGE -->
+  <section id="change" class="anchor band-2">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>What changes in day-to-day underwriting</h2>
+          <p class="lede" style="margin-top:0;">
+            Mark stabilizes intake before underwriting decisions are made.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <article class="tile tile-compact">
+          <h3>Consistent starting points</h3>
+          <p>Submissions enter underwriting as structured, comparable case files.</p>
+        </article>
+        <article class="tile tile-compact">
+          <h3>Missing data surfaced early</h3>
+          <p>Omissions and inconsistencies are identified upfront, before review begins.</p>
+        </article>
+        <article class="tile tile-compact">
+          <h3>Cleaner downstream decisions</h3>
+          <p>Underwriters start from a stable baseline, reducing early rework and decision noise.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- MEASURE -->
+  <section id="measure" class="anchor band-1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <h2>What Mark is designed to measure</h2>
+          <p class="lede" style="margin-top:0;">
+            Mark makes intake quality observable and governable.
+          </p>
+        </div>
+      </div>
+
+      <div class="measure-grid">
+        <div class="tile" style="padding:22px;">
+          <h3 style="margin-top:0;">Core signals</h3>
+          <ul class="bullets">
+            <li>Submission completeness at intake</li>
+            <li>Frequency and type of missing attributes</li>
+            <li>Variance in broker-provided exposure data</li>
+            <li>Early indicators of escalation risk</li>
+          </ul>
+        </div>
+
+        <aside class="aside">
+          <h3>Where Mark fits</h3>
+          <p style="margin:0; color: rgba(11,18,32,.66); font-size:14px; line-height:1.6;">
+            Mark operates upstream of risk evaluation and governance—ensuring consistent inputs before downstream decision logic is applied.
+          </p>
+
+          <div style="margin-top:14px; border-radius:14px; border:1px solid rgba(11,18,32,.12); background: rgba(255,255,255,.55); padding:14px;">
+            <svg viewBox="0 0 360 110" width="100%" height="110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Intake to decision flow schematic">
+              <defs>
+                <style>
+                  .b{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.26); stroke-width:1.6; }
+                  .s{ stroke: rgba(11,18,32,.34); stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+                  .m{ fill: rgba(11,18,32,.12); stroke: rgba(11,18,32,.34); stroke-width:1.8; }
+                </style>
+              </defs>
+              <rect x="18" y="34" width="92" height="42" rx="14" class="b"/>
+              <rect x="134" y="28" width="92" height="54" rx="14" class="m"/>
+              <rect x="250" y="34" width="92" height="42" rx="14" class="b"/>
+              <path class="s" d="M110 55h24"/>
+              <path class="s" d="M226 55h24"/>
+              <path class="s" d="M168 43h24M168 55h32M168 67h28" opacity=".65"/>
+            </svg>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE BAND -->
+  <section class="quote-band" aria-label="Signature quote band">
+    <div class="container quote-wrap">
+      <p class="quote-big">
+        Underwriting governance is only as strong as the intake it rests on.
+        <span class="light">Mark turns submissions into decision-ready case files.</span>
+      </p>
+      <p class="quote-sub">
+        Standardize the starting point, and downstream appetite, guidance, and oversight become enforceable—without adding process friction for underwriters.
+      </p>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- CTA -->
+  <section id="evaluate" class="anchor band-2">
+    <div class="container">
+      <div class="cta">
+        <span class="kicker">Evaluate</span>
+        <h2 style="margin-top:12px;">Evaluate Mark in your intake flow</h2>
+        <p>See how Mark fits into your existing submission and underwriting process.</p>
+
+        <div class="cta-actions">
+          <a class="btn" href="persisto_platform.html">Platform Overview</a>
+          <a class="btn btn-primary" href="#top">Request a Product Walkthrough</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot">
+        <div>© <span id="year"></span> Persisto. All rights reserved.</div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="#problem">Problem</a>
+          <a href="#reality">Reality</a>
+          <a href="#change">Change</a>
+          <a href="#measure">Measure</a>
+          <a href="#evaluate">Evaluate</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
