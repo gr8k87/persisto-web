@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SANDY — Underwriter Assistant | Persisto</title>
+  <title>VERA — Underwriting Policy Control | Persisto</title>
 
   <style>
     :root{
@@ -432,7 +432,7 @@
       .quote-wrap{ padding: 60px 0; }
     }
 
-  /* Mini capability tiles (end of Evaluate) */
+    /* Mini capability tiles (end of Evaluate) */
     .mini-nav{
       margin-top: 18px;
       padding-top: 18px;
@@ -478,19 +478,12 @@
       cursor: default;
     }
     .mini-tile.is-current:hover{ transform:none; background: rgba(240,238,230,.82); }
-    .mini-caption{
-      margin: 0;
-      color: rgba(11,18,32,.62);
-      font-size: 12px;
-      line-height: 1.5;
-    }
     @media (max-width: 980px){
       .mini-grid{ grid-template-columns: repeat(2, 1fr); }
     }
     @media (max-width: 520px){
       .mini-grid{ grid-template-columns: 1fr; }
     }
-
   </style>
 </head>
 
@@ -513,7 +506,7 @@
         </nav>
 
         <div class="navcta">
-          <a class="btn" href="persisto_platform.html">Platform Overview</a>
+          <a class="btn" href="persisto-platform">Platform Overview</a>
           <a class="btn btn-primary" href="#evaluate">Request a Product Walkthrough</a>
         </div>
       </div>
@@ -526,9 +519,9 @@
       <div class="hero-grid">
         <div>
           <span class="kicker">Product</span>
-          <h1>SANDY — Underwriter Assistant</h1>
+          <h1>VERA — Underwriting Policy Control</h1>
           <p class="lede">
-            Reasons over the full case context—submissions, enrichment, and guidelines—to support underwriting judgment in real time.
+            Controls underwriting policies so rules, thresholds, and guardrails are applied consistently—and every decision is reconstructable.
           </p>
 
           <div class="hero-actions">
@@ -538,9 +531,9 @@
         </div>
 
         <!-- Hero visual placeholder -->
-        <div class="media-frame" aria-label="SANDY hero visual placeholder">
-          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Placeholder for SANDY assistant visual" />
-          <div class="media-label">Placeholder: SANDY assistant visual</div>
+        <div class="media-frame" aria-label="VERA hero visual placeholder">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Placeholder for VERA policy control visual" />
+          <div class="media-label">Placeholder: VERA policy control visual</div>
         </div>
       </div>
     </div>
@@ -548,15 +541,15 @@
 
   <div class="section-divider"></div>
 
-  <!-- PROBLEM (vertical cards) -->
+  <!-- PROBLEM -->
   <section id="problem" class="anchor band-3">
     <div class="container">
       <div class="section-head">
         <div>
           <span class="kicker">PROBLEM</span>
-          <h2>The problem SANDY solves</h2>
+          <h2>The problem VERA solves</h2>
           <p class="lede" style="margin-top:0;">
-            Underwriting decisions increasingly require reasoning across fragmented and conditional information.
+            Underwriting policy is documented—but rarely controlled as an enforceable, versioned system of record at decision time.
           </p>
         </div>
       </div>
@@ -564,7 +557,7 @@
       <div class="grid-3">
         <article class="tile">
           <div class="icon-frame" aria-hidden="true">
-            <!-- format chaos -->
+            <!-- policy sprawl icon -->
             <svg viewBox="0 0 320 52" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <style>
@@ -572,43 +565,20 @@
                   .f0{ fill: rgba(11,18,32,.08); }
                 </style>
               </defs>
-              <rect x="18" y="12" width="64" height="28" rx="8" class="f0" stroke="rgba(11,18,32,.26)" stroke-width="1.4"/>
-              <rect x="96" y="10" width="64" height="32" rx="8" class="f0" stroke="rgba(11,18,32,.22)" stroke-width="1.4"/>
-              <rect x="174" y="14" width="64" height="24" rx="8" class="f0" stroke="rgba(11,18,32,.18)" stroke-width="1.4"/>
-              <path class="s0" d="M64 26h18M142 26h18M220 26h18" opacity=".65"/>
-              <path class="s0" d="M250 14l20 12-20 12" opacity=".6"/>
+              <rect x="22" y="12" width="62" height="28" rx="10" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <rect x="96" y="10" width="62" height="32" rx="10" class="f0" stroke="rgba(11,18,32,.22)" stroke-width="1.4"/>
+              <rect x="170" y="14" width="62" height="24" rx="10" class="f0" stroke="rgba(11,18,32,.18)" stroke-width="1.4"/>
+              <path class="s0" d="M46 26h14M122 26h14M196 26h14" opacity=".65"/>
+              <path class="s0" d="M246 14l20 12-20 12" opacity=".55"/>
             </svg>
           </div>
-          <h3>Fragmented decision context</h3>
-          <p>No single place contains all information required to assess a risk.</p>
+          <h3>Policy sprawl</h3>
+          <p>Rules and thresholds live across guidelines, spreadsheets, inboxes, and hard-coded logic.</p>
         </article>
 
         <article class="tile">
           <div class="icon-frame" aria-hidden="true">
-            <!-- manual reconciliation -->
-            <svg viewBox="0 0 320 52" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <style>
-                  .s0{ stroke: rgba(11,18,32,.44); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round;}
-                  .f0{ fill: rgba(11,18,32,.08); }
-                </style>
-              </defs>
-              <rect x="22" y="10" width="90" height="32" rx="10" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
-              <path class="s0" d="M36 22h56M36 30h44" opacity=".65"/>
-              <rect x="140" y="12" width="70" height="28" rx="10" class="f0" stroke="rgba(11,18,32,.22)" stroke-width="1.4"/>
-              <path class="s0" d="M154 26h42" opacity=".65"/>
-              <path class="s0" d="M114 26h26" opacity=".6"/>
-              <path class="s0" d="M214 26h26" opacity=".6"/>
-              <path class="s0" d="M246 18l16 16M262 18l-16 16" opacity=".45"/>
-            </svg>
-          </div>
-          <h3>Manual synthesis burden</h3>
-          <p>Underwriters must assemble, reconcile, and interpret inputs before judgment begins.</p>
-        </article>
-
-        <article class="tile">
-          <div class="icon-frame" aria-hidden="true">
-            <!-- decision noise -->
+            <!-- uncontrolled change icon -->
             <svg viewBox="0 0 320 52" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <style>
@@ -617,41 +587,65 @@
                   .f0{ fill: rgba(11,18,32,.08); }
                 </style>
               </defs>
-              <circle cx="56" cy="26" r="14" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
-              <path class="s1" d="M56 18v10M56 30h0" />
-              <path class="s0" d="M76 26h66" opacity=".6"/>
-              <rect x="152" y="12" width="64" height="28" rx="12" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
-              <path class="s1" d="M166 26h36" opacity=".65"/>
-              <path class="s0" d="M216 26h28" opacity=".6"/>
-              <circle cx="270" cy="20" r="6.5" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
-              <circle cx="286" cy="32" r="6.5" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
-              <path class="s1" d="M270 20l16 12" opacity=".55"/>
+              <rect x="22" y="10" width="86" height="32" rx="12" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M38 24h54M38 32h38" opacity=".65"/>
+              <path class="s0" d="M118 26h28" opacity=".55"/>
+              <circle cx="170" cy="26" r="14" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M170 18v9l7 4" opacity=".65"/>
+              <path class="s0" d="M196 26h28" opacity=".55"/>
+              <path class="s0" d="M250 16l18 10-18 10" opacity=".55"/>
             </svg>
           </div>
-          <h3>Inconsistent reasoning</h3>
-          <p>As complexity increases, decision consistency declines—even among experienced teams.</p>
+          <h3>Uncontrolled change</h3>
+          <p>Policy updates ship without clear versioning, approvals, or effective dates—behavior shifts silently.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true">
+            <!-- unreconstructable decisions icon -->
+            <svg viewBox="0 0 320 52" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <style>
+                  .s0{ stroke: rgba(11,18,32,.44); stroke-width:1.8; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+                  .s1{ stroke: rgba(11,18,32,.28); stroke-width:1.4; fill:none; stroke-linecap:round; stroke-linejoin:round;}
+                  .f0{ fill: rgba(11,18,32,.08); }
+                </style>
+              </defs>
+              <rect x="22" y="12" width="92" height="28" rx="12" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M38 26h56" opacity=".65"/>
+              <path class="s0" d="M120 26h20" opacity=".55"/>
+              <rect x="146" y="12" width="62" height="28" rx="12" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M160 22h34M160 30h22" opacity=".65"/>
+              <path class="s0" d="M212 26h22" opacity=".55"/>
+              <circle cx="262" cy="26" r="12" class="f0" stroke="rgba(11,18,32,.24)" stroke-width="1.4"/>
+              <path class="s1" d="M256 26h12M262 20v12" opacity=".55"/>
+            </svg>
+          </div>
+          <h3>Unreconstructable decisions</h3>
+          <p>When outcomes are questioned later, teams can’t prove what policy was in force and what applied.</p>
         </article>
       </div>
     </div>
   </section>
 
-  <!-- PROBLEM REALITY BAND -->
+  <!-- INDUSTRY REALITY BAND -->
   <section id="reality" class="anchor fact-band" aria-label="Industry reality band">
-          <div class="section-head">
-  <span class="kicker">INDUSTRY REALITY</span>
-</div>
+    <div class="section-head">
+      <span class="kicker">INDUSTRY REALITY</span>
+    </div>
+
     <div class="container fact-wrap">
       <div class="fact-split">
         <div class="fact-block">
-          <p class="fact">Decision quality degrades as cognitive load and context fragmentation increase</p>
-          <div class="source">Sources: McKinsey decision-making research; Harvard Business Review</div>
+          <p class="fact">Model governance standards increasingly expect documented, controlled, and auditable decisioning in production</p>
+          <div class="source">Sources: SR 11-7; OSFI E-23</div>
         </div>
 
         <div class="fact-rule" aria-hidden="true"></div>
 
         <div class="fact-block">
-          <p class="fact">Knowledge workers lose effectiveness when forced to reason across multiple systems</p>
-          <div class="source">Sources: McKinsey Global Institute</div>
+          <p class="fact">Policy implemented across documents and code makes decision behavior hard to reproduce after the fact</p>
+          <div class="source">Sources: Internal audit + compliance patterns</div>
         </div>
       </div>
     </div>
@@ -664,26 +658,26 @@
     <div class="container">
       <div class="section-head">
         <div>
-           <span class="kicker">OPERATING SHIFT</span>
+          <span class="kicker">OPERATING SHIFT</span>
           <h2>What changes in day-to-day underwriting</h2>
           <p class="lede" style="margin-top:0;">
-            SANDY stabilizes intake before underwriting decisions are made.
+            VERA makes policy state explicit—so rule behavior is consistent, reviewable, and defensible.
           </p>
         </div>
       </div>
 
       <div class="grid-3">
         <article class="tile tile-compact">
-          <h3>Context is assembled automatically</h3>
-          <p>Relevant facts from the case file are brought together at the moment of inquiry.</p>
+          <h3>Policy becomes executable</h3>
+          <p>Rules, thresholds, and guardrails are managed as governed policy objects—not scattered guidance.</p>
         </article>
         <article class="tile tile-compact">
-          <h3>Reasoning becomes easier</h3>
-          <p>Underwriters engage with synthesized context instead of raw inputs.</p>
+          <h3>Change becomes deliberate</h3>
+          <p>Policy updates are versioned, approved, and effective-dated—so behavior changes are intentional.</p>
         </article>
         <article class="tile tile-compact">
-          <h3>Judgment remains human</h3>
-          <p>SANDY supports thinking—it does not make or execute decisions.</p>
+          <h3>Decisions become defensible</h3>
+          <p>Each decision is linked to the exact policy state applied at the time—so questions are answerable.</p>
         </article>
       </div>
     </div>
@@ -696,10 +690,10 @@
     <div class="container">
       <div class="section-head">
         <div>
-           <span class="kicker">OUTCOME</span>
-          <h2>What SANDY is designed to do</h2>
+          <span class="kicker">OUTCOME</span>
+          <h2>What VERA is designed to control</h2>
           <p class="lede" style="margin-top:0;">
-            SANDY applies large‑language‑model reasoning within the boundaries of a specific case file.
+            VERA controls how underwriting policy is applied—by making policy state, enforcement, and traceability explicit at decision time.
           </p>
         </div>
       </div>
@@ -708,33 +702,36 @@
         <div class="tile" style="padding:22px;">
           <h3 style="margin-top:0;">Core signals</h3>
           <ul class="bullets">
-            <li>Reasoning across submissions, enrichment data, and guidelines simultaneously</li>
-            <li>Contextual answers tailored to the current case</li>
-            <li>On‑demand synthesis of complex or conditional information</li>
-            <li>Clarification of underwriting guidance in context</li>
+            <li>Policy versions and effective dates (what was in force, when)</li>
+            <li>Rule applicability (what applies to which product/program/region)</li>
+            <li>Approval and ownership trail (who changed what, and why)</li>
+            <li>Decision snapshots (what policy state was applied for a given case)</li>
           </ul>
         </div>
 
         <aside class="aside">
-          <h3>Where SANDY fits</h3>
+          <h3>Where VERA fits</h3>
           <p style="margin:0; color: rgba(11,18,32,.66); font-size:14px; line-height:1.6;">
-SANDY operates alongside the underwriter—within the decision boundaries governed by ARGEN and informed by Mark and SIA.          </p>
+            VERA feeds ARGEN—providing governed, versioned policy inputs so decision boundaries and guardrails apply consistently and can be reconstructed later.
+          </p>
 
           <div style="margin-top:14px; border-radius:14px; border:1px solid rgba(11,18,32,.12); background: rgba(255,255,255,.55); padding:14px;">
-            <svg viewBox="0 0 360 110" width="100%" height="110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Intake to decision flow schematic">
+            <svg viewBox="0 0 360 110" width="100%" height="110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Policy control to risk evaluation flow schematic">
               <defs>
                 <style>
                   .b{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.26); stroke-width:1.6; }
-                  .s{ stroke: rgba(11,18,32,.34); stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
                   .m{ fill: rgba(11,18,32,.12); stroke: rgba(11,18,32,.34); stroke-width:1.8; }
+                  .s{ stroke: rgba(11,18,32,.34); stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
                 </style>
               </defs>
-              <rect x="18" y="34" width="92" height="42" rx="14" class="b"/>
-              <rect x="134" y="28" width="92" height="54" rx="14" class="m"/>
+              <rect x="18" y="34" width="102" height="42" rx="14" class="m"/>
+              <rect x="140" y="34" width="92" height="42" rx="14" class="b"/>
               <rect x="250" y="34" width="92" height="42" rx="14" class="b"/>
-              <path class="s" d="M110 55h24"/>
-              <path class="s" d="M226 55h24"/>
-              <path class="s" d="M168 43h24M168 55h32M168 67h28" opacity=".65"/>
+              <path class="s" d="M120 55h20"/>
+              <path class="s" d="M232 55h18"/>
+              <path class="s" d="M60 46h50M60 55h62M60 64h54" opacity=".65"/>
+              <path class="s" d="M168 55h36" opacity=".55"/>
+              <path class="s" d="M276 55h40" opacity=".55"/>
             </svg>
           </div>
         </aside>
@@ -746,11 +743,11 @@ SANDY operates alongside the underwriter—within the decision boundaries govern
   <section class="quote-band" aria-label="Signature quote band">
     <div class="container quote-wrap">
       <p class="quote-big">
-        Underwriting is a reasoning task, not a retrieval problem.
-        <span class="light">SANDY brings context together—so judgment stays deliberate.</span>
+        Policy control is the difference between documented intent and enforceable underwriting behavior.
+        <span class="light">VERA makes policy state explicit at decision time.</span>
       </p>
       <p class="quote-sub">
-        Support complex decisions without diluting accountability.
+        Version what changes, approve what’s enforced, and make every decision reconstructable—without adding operational friction.
       </p>
     </div>
   </section>
@@ -760,56 +757,74 @@ SANDY operates alongside the underwriter—within the decision boundaries govern
   <!-- CTA -->
   <section id="evaluate" class="anchor band-2">
     <div class="container">
-      <div class="cta"> 
+      <div class="cta">
         <span class="kicker">Evaluate</span>
-        <h2 style="margin-top:12px;">Evaluate SANDY in your underwriting workflow</h2> 
-        <p>See how SANDY fits into your existing submission and underwriting process.</p>
+        <h2 style="margin-top:12px;">Evaluate VERA in your policy workflow</h2>
+        <p>See how VERA fits into your underwriting policy governance model (pre-bind).</p>
 
         <div class="cta-actions">
-           <!--<a class="btn" href="persisto_platform.html">Platform Overview</a> -->
           <a class="btn btn-primary" href="#top">Request a Product Walkthrough</a>
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- Mini navigation to other capabilities -->
+        <!-- Mini navigation to other capabilities -->
         <div class="mini-nav" aria-label="Explore other Persisto capabilities">
-          <p class="mini-caption">Explore the Persisto suite:</p>
+          <div class="section-head" style="margin-bottom:0;">
+            <span class="kicker">Explore the Persisto suite</span>
+          </div>
+
           <div class="mini-grid">
-            <a class="mini-tile" href="persisto_platform.html">
+            <a class="mini-tile" href="persisto-platform">
               <span>Platform Overview</span><span class="chev">›</span>
             </a>
 
-            <a class="mini-tile" href="submission_intake.html">
+            <a class="mini-tile" href="persisto-product-1-mark">
               <span>Submission Intake</span><span class="chev">›</span>
             </a>
 
-            <a class="mini-tile" href="risk_data_enrichment.html">
+            <a class="mini-tile" href="persisto-product-2-sia">
               <span>Risk Data Enrichment</span><span class="chev">›</span>
             </a>
-            <a class="mini-tile" href="policy_control.html">
-              <span>Underwriting Policy Control</span><span class="chev">›</span>
-            </a>
 
-            <a class="mini-tile" href="decision_governance.html">
+             <div class="mini-tile is-current" aria-current="page">
+              <span>Underwriting Policy Control</span><span class="chev">•</span>
+            </div>
+            
+            <a class="mini-tile" href="persisto-product-3-argen">
               <span>Decision Governance</span><span class="chev">›</span>
             </a>
 
-            <div class="mini-tile is-current" aria-current="page">
-              <span>Underwriter Assistant</span><span class="chev">•</span>
-            </div>
 
-            <a class="mini-tile" href="phone_automation.html">
+            <a class="mini-tile" href="persisto-product-4-sandy">
+              <span>Underwriter Assistant</span><span class="chev">›</span>
+            </a>
+
+            <a class="mini-tile" href="persisto-product-5-amy">
               <span>Phone Automation</span><span class="chev">›</span>
             </a>
 
-            <a class="mini-tile" href="client_risk_coach.html">
+            <a class="mini-tile" href="persisto-product-6-ava">
               <span>Client Risk Coach</span><span class="chev">›</span>
             </a>
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot">
+        <div>© <span id="year"></span> Persisto. All rights reserved.</div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="#problem">Problem</a>
+          <a href="#reality">Reality</a>
+          <a href="#change">Change</a>
+          <a href="#measure">Measure</a>
+          <a href="#evaluate">Evaluate</a>
+        </div>
+      </div>
+    </div>
   </footer>
 
   <script>
