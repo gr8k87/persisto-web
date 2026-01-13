@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Underwriting Decisioning | Persisto Solutions</title>
+
+  <style>
+    :root{
+      --paper: #F0EEE6;
+      --paper2:#F7F5EE;
+      --paper3:#ECE9E0;
+      --ink:   #0B1220;
+      --muted: rgba(11,18,32,.72);
+      --subtle:rgba(11,18,32,.55);
+
+      --stroke: rgba(11,18,32,.12);
+      --stroke2:rgba(11,18,32,.18);
+
+      --tile2: rgba(255,255,255,.86);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2:0 10px 28px rgba(11,18,32,.10);
+
+      --radius: 16px;
+      --radius2:22px;
+      --max: 1120px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing:.2px;
+      line-height:1.45;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(var(--max), calc(100% - 48px)); margin-inline:auto; }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(240,238,230,.78);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap: 10px;
+      font-weight: 850;
+      letter-spacing:.4px;
+      color: var(--ink);
+    }
+    .logo{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(11,18,32,.08), rgba(11,18,32,.02));
+      border: 1px solid var(--stroke);
+    }
+    .navlinks{
+      display:flex; align-items:center; gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      flex-wrap:wrap;
+    }
+    .navlinks a:hover{ color: rgba(11,18,32,.92); }
+    .navcta{ display:flex; gap: 10px; align-items:center; }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke2);
+      background: rgba(255,255,255,.55);
+      color: rgba(11,18,32,.90);
+      font-weight: 850;
+      font-size: 14px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.72);
+      border-color: rgba(11,18,32,.24);
+    }
+    .btn-primary{
+      background: var(--ink);
+      border-color: var(--ink);
+      color: rgba(240,238,230,.95);
+    }
+    .btn-primary:hover{
+      background: rgba(11,18,32,.92);
+      border-color: rgba(11,18,32,.92);
+    }
+
+    /* Section bands + dividers */
+    section{ padding: 84px 0; }
+    .band-1{ background: var(--paper); }
+    .band-2{ background: var(--paper2); box-shadow: inset 0 1px 0 rgba(255,255,255,.75); }
+    .band-3{ background: var(--paper3); box-shadow: inset 0 1px 0 rgba(255,255,255,.75); }
+    .section-divider{
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(11,18,32,.14), transparent);
+    }
+    .anchor{ scroll-margin-top: 88px; }
+
+    /* Typographic system */
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.55);
+      color: rgba(11,18,32,.78);
+      font-weight: 850;
+      font-size: 12px;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+    h1{
+      margin: 16px 0 0;
+      font-size: clamp(36px, 4.0vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.95px;
+    }
+    h2{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 2.4vw, 34px);
+      letter-spacing: -0.6px;
+      line-height: 1.12;
+    }
+    .lede{
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 82ch;
+    }
+    .section-head{
+      text-align: center;
+      margin-bottom: 26px;
+      display:flex;
+      justify-content:center;
+    }
+    .section-head > div{ max-width: 82ch; }
+
+    /* Layout */
+    .hero{ padding-top: 58px; padding-bottom: 72px; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 34px;
+      align-items:center;
+    }
+    .hero-actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 18px;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* Tiles */
+    .tile{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,18,32,.14);
+      background: var(--tile2);
+      box-shadow: var(--shadow2);
+      padding: 18px;
+      position: relative;
+      overflow:hidden;
+    }
+    .tile:before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+      opacity: .9;
+    }
+    .tile h3{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Icon frame for problem cards */
+    .icon-frame{
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(240,238,230,.70);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom: 12px;
+      overflow:hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .icon-frame svg{ width: 100%; height: 100%; }
+
+    /* Media placeholder */
+    .media-frame{
+      position: relative;
+      border-radius: 18px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.56));
+      box-shadow: var(--shadow2);
+      overflow: hidden;
+      isolation: isolate;
+      min-height: 410px;
+    }
+    .media-frame img{
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      opacity: .98;
+    }
+    .media-label{
+      position: absolute;
+      inset: auto 14px 14px 14px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(240,238,230,.86);
+      color: rgba(11,18,32,.72);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .3px;
+      pointer-events: none;
+      width: fit-content;
+      max-width: calc(100% - 28px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* PROBLEM REALITY BAND — editorial split */
+    .fact-band{
+      border-top: 1px solid rgba(11,18,32,.10);
+      border-bottom: 1px solid rgba(11,18,32,.10);
+      background:
+        radial-gradient(900px 320px at 18% -10%, rgba(11,18,32,.08), transparent 60%),
+        radial-gradient(700px 260px at 88% 20%, rgba(15,42,95,.10), transparent 55%),
+        rgba(255,255,255,.66);
+    }
+    .fact-wrap{ padding: 44px 0; }
+    .fact-split{
+      display:grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .fact-rule{
+      background: rgba(11,18,32,.14);
+      border-radius: 999px;
+    }
+    .fact-block{
+      padding: 4px 10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height: 128px;
+    }
+    .fact{
+      font-size: clamp(24px, 2.3vw, 30px);
+      line-height: 1.10;
+      letter-spacing: -0.55px;
+      font-weight: 900;
+      color: rgba(11,18,32,.94);
+      margin: 0;
+    }
+    .source{
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(11,18,32,.52);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    /* CHANGE */
+    .tile-compact h3{ font-size: 15px; }
+    .tile-compact p{ font-size: 14px; }
+
+    /* MEASURE */
+    .measure-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .bullets{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: none;
+    }
+    .bullets li{ margin: 8px 0; }
+
+    .aside{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(240,238,230,.60);
+      padding: 18px;
+    }
+    .aside h3{
+      margin: 0 0 10px;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    /* QUOTE BAND — standalone signature band */
+    .quote-band{
+      background:
+        radial-gradient(1100px 420px at 20% -10%, rgba(11,18,32,.10), transparent 62%),
+        radial-gradient(900px 340px at 85% 10%, rgba(46,111,126,.12), transparent 55%),
+        rgba(255,255,255,.72);
+      border-top: 1px solid rgba(11,18,32,.10);
+      border-bottom: 1px solid rgba(11,18,32,.10);
+    }
+    .quote-wrap{
+      padding: 72px 0;
+      text-align:center;
+    }
+    .quote-big{
+      margin: 0 auto;
+      max-width: 36ch;
+      font-size: clamp(30px, 3.0vw, 44px);
+      line-height: 1.06;
+      letter-spacing: -0.95px;
+      font-weight: 950;
+      color: rgba(11,18,32,.94);
+    }
+    .quote-big .light{
+      font-weight: 850;
+      color: rgba(11,18,32,.86);
+    }
+    .quote-sub{
+      margin: 14px auto 0;
+      max-width: 72ch;
+      color: rgba(11,18,32,.70);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    /* CTA */
+    .cta{
+      border-radius: 26px;
+      border: 1px solid rgba(11,18,32,.20);
+      background:
+        radial-gradient(1100px 380px at 18% -10%, rgba(11,18,32,.09), transparent 60%),
+        radial-gradient(900px 340px at 85% 10%, rgba(46,111,126,.12), transparent 55%),
+        rgba(255,255,255,.86);
+      box-shadow: 0 26px 90px rgba(11,18,32,.14);
+      padding: 44px 34px;
+      text-align:center;
+    }
+    .cta p{
+      margin: 0;
+      color: rgba(11,18,32,.74);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .cta-actions{
+      display:flex;
+      justify-content:center;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 18px;
+    }
+
+    footer{
+      padding: 28px 0 40px;
+      color: var(--subtle);
+      font-size: 13px;
+      border-top: 1px solid var(--stroke);
+      background: var(--paper3);
+    }
+    .foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      flex-wrap:wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .navlinks{ display:none; }
+      .hero-grid{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .fact-split{ grid-template-columns: 1fr; gap: 12px; }
+      .fact-rule{ display:none; }
+      .measure-grid{ grid-template-columns: 1fr; }
+      .media-frame{ min-height: 320px; }
+      .quote-wrap{ padding: 60px 0; }
+    }
+
+  /* Mini capability tiles (end of Evaluate) */
+    .mini-nav{
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(11,18,32,.12);
+    }
+    .mini-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mini-tile{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 10px 26px rgba(11,18,32,.08);
+      font-weight: 850;
+      font-size: 13px;
+      letter-spacing: .2px;
+      color: rgba(11,18,32,.88);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      position: relative;
+    }
+    .mini-tile:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.82);
+      border-color: rgba(11,18,32,.24);
+    }
+    .mini-tile .chev{
+      opacity: .55;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .mini-tile.is-current{
+      background: rgba(240,238,230,.82);
+      border-color: rgba(11,18,32,.26);
+      box-shadow: 0 12px 30px rgba(11,18,32,.10);
+      cursor: default;
+    }
+    .mini-tile.is-current:hover{ transform:none; background: rgba(240,238,230,.82); }
+    .mini-caption{
+      margin: 0;
+      color: rgba(11,18,32,.62);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    @media (max-width: 980px){
+      .mini-grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px){
+      .mini-grid{ grid-template-columns: 1fr; }
+    }
+
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <div class="topbar">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#top" aria-label="Persisto Solution">
+          <div class="logo" aria-hidden="true"></div>
+          <div>Persisto</div>
+        </a>
+
+        <nav class="navlinks" aria-label="Solution navigation">
+          <a href="#problem">Problem</a>
+          <a href="#how">How it works</a>
+          <a href="#controls">Controls</a>
+          <a href="#outcomes">Outcomes</a>
+          <a href="#measure">Measure</a>
+          <a href="#evaluate">Evaluate</a>
+        </nav>
+
+        <div class="navcta">
+          <a class="btn" href="persisto_platform.html">Platform Overview</a>
+          <a class="btn btn-primary" href="#evaluate">Request a Walkthrough</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO + CONTENT -->
+  <main id="top" class="hero band-1">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <span class="kicker">SOLUTION</span>
+          <h1>Underwriting Decisioning</h1>
+          <p class="lede">Govern underwriting decisions across people, policy, and AI — so execution stays aligned with appetite, authority, and portfolio strategy.</p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#evaluate">Request a Walkthrough</a>
+            <a class="btn" href="#problem">Why this matters</a>
+          </div>
+        </div>
+
+        <div class="media-frame" aria-label="Underwriting decision layer schematic placeholder">
+          <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Placeholder for underwriting decision layer schematic" />
+          <div class="media-label">Placeholder: decision layer schematic (inputs → governed decision → rationale)</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="section-divider"></div>
+
+  <!-- PROBLEM -->
+  <section id="problem" class="anchor band-3">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">PROBLEM</span>
+          <h2>Why underwriting decisions break at scale</h2>
+          <p class="lede" style="margin-top:0;">
+            Performance degrades when decision logic is split across people, rules, spreadsheets, and models—without a governing layer.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 220 120" width="100%" height="100%" role="img" aria-label="Variance icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="18" y="20" width="72" height="40" rx="10" class="f"/>
+  <rect x="130" y="20" width="72" height="40" rx="10" class="f"/>
+  <path d="M54 46c10-14 20-14 30 0" class="s" opacity=".8"/>
+  <path d="M166 34c8 8 16 16 24 0" class="s" opacity=".8"/>
+  <path d="M40 82h140" class="s" opacity=".35"/>
+  <path d="M40 94h92" class="s" opacity=".35"/>
+</svg></div>
+          <h3>Interpretation variance</h3>
+          <p>Underwriters apply the same guideline differently under time pressure—creating drift that is invisible until results emerge.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 220 120" width="100%" height="100%" role="img" aria-label="Conflict icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="24" y="22" width="78" height="34" rx="10" class="f"/>
+  <rect x="118" y="22" width="78" height="34" rx="10" class="f"/>
+  <path d="M102 39h16" class="s" opacity=".55"/>
+  <path d="M62 78l18 18M80 78L62 96" class="s" opacity=".75"/>
+  <path d="M158 78l18 18M176 78l-18 18" class="s" opacity=".75"/>
+  <path d="M110 68v36" class="s" opacity=".35"/>
+</svg></div>
+          <h3>Policy and model conflict</h3>
+          <p>Rules say one thing, models suggest another. Exceptions happen quietly, and the final decision is hard to explain consistently.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 220 120" width="100%" height="100%" role="img" aria-label="Exceptions icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="26" y="18" width="168" height="54" rx="14" class="f"/>
+  <path d="M56 44h66" class="s" opacity=".6"/>
+  <path d="M56 56h40" class="s" opacity=".45"/>
+  <path d="M154 36l10 10 18-18" class="s" opacity=".8"/>
+  <path d="M50 92c10-10 20-14 34-14 14 0 24 4 34 14" class="s" opacity=".45"/>
+  <path d="M126 92c10-10 20-14 34-14 14 0 24 4 34 14" class="s" opacity=".45"/>
+</svg></div>
+          <h3>Uncontrolled exceptions</h3>
+          <p>Overrides become the real policy. Without structured capture, you cannot steer behavior, learn, or defend decisions.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+    <!-- OPERATIONAL REALITY BAND -->
+  <section id="reality" class="anchor fact-band" aria-label="Industry reality band">
+    <div class="section-head">
+      <span class="kicker">OPERATIONAL REALITY</span>
+    </div>
+
+    <div class="container fact-wrap">
+      <div class="fact-split">
+        <div class="fact-block">
+          <p class="fact">Regulators expect insurers to explain how underwriting decisions are made—not just the outputs of rules or models.</p>
+          <div class="source">Sources: NAIC — Artificial Intelligence Systems Evaluation Questions</div>
+        </div>
+
+        <div class="fact-rule" aria-hidden="true"></div>
+
+        <div class="fact-block">
+          <p class="fact">Model scores or automated outputs alone are insufficient without documented decision rationale and human accountability.</p>
+          <div class="source">Sources: McKinsey — The future of underwriting in property and casualty insurance</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="section-divider"></div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how" class="anchor band-2">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">HOW IT WORKS</span>
+          <h2>How underwriting decisions are made with Persisto</h2>
+          <p class="lede" style="margin-top:0;">
+            Persisto does not replace underwriting systems. It governs how decisions are formed—by combining policy, risk signals, and controlled discretion.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 280 120" width="100%" height="100%" role="img" aria-label="Flow icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="18" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="104" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="190" y="36" width="72" height="44" rx="12" class="f"/>
+  <path d="M90 58h14M176 58h14" class="s" opacity=".55"/>
+  <path d="M136 36v44" class="s" opacity=".25"/>
+  <path d="M222 36v44" class="s" opacity=".25"/>
+  <path d="M54 58h0" class="s"/>
+</svg></div>
+          <h3>1) Normalize the case</h3>
+          <p>Work from a decision-ready case object, not fragmented submission artifacts.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 280 120" width="100%" height="100%" role="img" aria-label="Flow icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="18" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="104" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="190" y="36" width="72" height="44" rx="12" class="f"/>
+  <path d="M90 58h14M176 58h14" class="s" opacity=".55"/>
+  <path d="M136 36v44" class="s" opacity=".25"/>
+  <path d="M222 36v44" class="s" opacity=".25"/>
+  <path d="M54 58h0" class="s"/>
+</svg></div>
+          <h3>2) Apply underwriting policy</h3>
+          <p>Make policy executable: thresholds, constraints, and permitted discretion are explicit and testable.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 280 120" width="100%" height="100%" role="img" aria-label="Flow icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="18" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="104" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="190" y="36" width="72" height="44" rx="12" class="f"/>
+  <path d="M90 58h14M176 58h14" class="s" opacity=".55"/>
+  <path d="M136 36v44" class="s" opacity=".25"/>
+  <path d="M222 36v44" class="s" opacity=".25"/>
+  <path d="M54 58h0" class="s"/>
+</svg></div>
+          <h3>3) Incorporate risk signals</h3>
+          <p>Evaluate models and enriched signals within the policy frame—so guidance is explainable, not a black box.</p>
+        </article>
+      </div>
+
+      <div style="height:14px;"></div>
+
+      <div class="grid-3">
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 280 120" width="100%" height="100%" role="img" aria-label="Flow icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="18" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="104" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="190" y="36" width="72" height="44" rx="12" class="f"/>
+  <path d="M90 58h14M176 58h14" class="s" opacity=".55"/>
+  <path d="M136 36v44" class="s" opacity=".25"/>
+  <path d="M222 36v44" class="s" opacity=".25"/>
+  <path d="M54 58h0" class="s"/>
+</svg></div>
+          <h3>4) Capture exceptions as decisions</h3>
+          <p>Allow overrides when justified—and record them as governed variance, not hidden deviation.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 280 120" width="100%" height="100%" role="img" aria-label="Flow icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="18" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="104" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="190" y="36" width="72" height="44" rx="12" class="f"/>
+  <path d="M90 58h14M176 58h14" class="s" opacity=".55"/>
+  <path d="M136 36v44" class="s" opacity=".25"/>
+  <path d="M222 36v44" class="s" opacity=".25"/>
+  <path d="M54 58h0" class="s"/>
+</svg></div>
+          <h3>5) Produce decision output + lineage</h3>
+          <p>Persist decision outcome, rationale, and lineage so auditability is generated during underwriting.</p>
+        </article>
+
+        <article class="tile">
+          <div class="icon-frame" aria-hidden="true"><svg viewBox="0 0 280 120" width="100%" height="100%" role="img" aria-label="Flow icon">
+  <defs>
+    <style>
+      .s{ fill:none; stroke: rgba(11,18,32,.55); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+      .f{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.18); stroke-width: 1.6; }
+    </style>
+  </defs>
+  <rect x="18" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="104" y="36" width="72" height="44" rx="12" class="f"/>
+  <rect x="190" y="36" width="72" height="44" rx="12" class="f"/>
+  <path d="M90 58h14M176 58h14" class="s" opacity=".55"/>
+  <path d="M136 36v44" class="s" opacity=".25"/>
+  <path d="M222 36v44" class="s" opacity=".25"/>
+  <path d="M54 58h0" class="s"/>
+</svg></div>
+          <h3>6) Feed downstream systems</h3>
+          <p>Output decisions and artifacts back into core systems without duplicating workflows.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <section id="controls" class="anchor band-1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">CONTROLS</span>
+          <h2>What gets controlled at decision time</h2>
+          <p class="lede" style="margin-top:0;">
+            Persisto’s control surface makes decision formation explicit—across policy, signals, and human judgment.
+          </p>
+        </div>
+      </div>
+
+      <div class="measure-grid">
+        <div class="tile">
+          <h3>Control surface</h3>
+          <ul class="bullets">
+            <li>Which policy applies (and why)</li>
+            <li>Which signals were used (and which were ignored)</li>
+            <li>What constraints were binding (appetite, authority, compliance)</li>
+            <li>Where judgment overrode automation (and rationale)</li>
+            <li>What changed from recommendation to final decision</li>
+          </ul>
+        </div>
+
+        <aside class="aside">
+          <div class="aside-kicker">DECISION LINEAGE</div>
+          <div class="aside-title">Defensible decisions without reconstruction</div>
+          <p class="aside-sub">
+            Persisto maintains decision lineage across policy, signals, and human judgment—so decisions are explainable without manual forensics.
+          </p>
+          <div class="media-frame" style="min-height:180px;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Placeholder for decision lineage diagram" />
+            <div class="media-label">Inputs → Decision layer → Outcome + rationale</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUTCOMES -->
+  <section id="outcomes" class="anchor band-3">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">OUTCOMES</span>
+          <h2>What improves when decisions are governed</h2>
+          <p class="lede" style="margin-top:0;">
+            This is not workflow automation. It is decision consistency, explainability, and portfolio alignment—at the point of underwriting.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <article class="tile">
+          <h3>Consistency without rigidity</h3>
+          <p>Standardize decisions while preserving controlled discretion for complex risks and edge cases.</p>
+        </article>
+
+        <article class="tile">
+          <h3>Auditability without added process</h3>
+          <p>Decision rationale is generated during underwriting—so audit and review are evidence-based, not narrative-based.</p>
+        </article>
+
+        <article class="tile">
+          <h3>Portfolio alignment</h3>
+          <p>Decision behavior stays aligned with appetite as conditions change—reducing silent drift across teams and time.</p>
+        </article>
+      </div>
+
+      <div style="height:12px;"></div>
+
+      <div class="tile" style="padding:18px 18px;">
+        <div class="kicker" style="margin:0 0 6px 0;">Operational improvements</div>
+        <ul class="bullets" style="margin:0;">
+          <li>Faster onboarding for new underwriters through explicit policy interpretation</li>
+          <li>Cleaner referral and authority patterns through structured exceptions</li>
+          <li>Fewer “unknown reasons” behind declines, terms, and overrides</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MEASURE -->
+  <section id="measure" class="anchor band-1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">MEASURE</span>
+          <h2>What Persisto is designed to measure</h2>
+          <p class="lede" style="margin-top:0;">
+            Make decision behavior observable so you can improve it—before outcomes appear in loss ratios and retention.
+          </p>
+        </div>
+      </div>
+
+      <div class="measure-grid">
+        <div class="tile">
+          <h3>Core decision signals</h3>
+          <ul class="bullets">
+            <li>Exception rate by policy, segment, and broker</li>
+            <li>Override reasons (structured categories)</li>
+            <li>Decision turnaround drivers (missing data vs policy conflict vs authority)</li>
+            <li>Policy drift indicators (bypassed rules, repeated workarounds)</li>
+            <li>Outcome correlation (which decision patterns predict loss and churn)</li>
+          </ul>
+        </div>
+
+        <aside class="aside">
+          <div class="aside-kicker">WHERE THIS SHOWS UP</div>
+          <div class="aside-title">Leadership can steer behavior, not just results</div>
+          <p class="aside-sub">
+            Portfolio steering improves when you can see decision patterns early—what is being approved, declined, overridden, and why.
+          </p>
+          <div class="media-frame" style="min-height:180px;">
+            <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Placeholder for decision behavior visualization" />
+            <div class="media-label">Placeholder: decision behavior visualization</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUOTE BAND -->
+  <section class="quote-band" aria-label="Signature quote band">
+    <div class="container quote-wrap">
+      <p class="quote-big">
+        Underwriting outcomes are downstream.
+        <span class="light">Decision behavior is upstream.</span>
+      </p>
+      <p class="quote-sub">
+        Persisto makes decision behavior observable and governable—across policy, signals, and controlled discretion.
+      </p>
+    </div>
+  </section>
+
+  <!-- EVALUATE -->
+  <section id="evaluate" class="anchor band-2">
+    <div class="container">
+      <div class="cta">
+        <div>
+          <span class="kicker">EVALUATE</span>
+          <h2>Evaluate underwriting decision governance in your flow</h2>
+          <p class="lede" style="margin-top:0;">
+            See how Persisto governs policy, signals, and exceptions—without replacing core underwriting systems.
+          </p>
+        </div>
+        <div class="cta-actions">
+          <a class="btn btn-primary" href="#">Request a Walkthrough</a>
+          <a class="btn" href="persisto_platform.html">View Platform Overview</a>
+        </div>
+      </div>
+
+      <div style="height:22px;"></div>
+
+   
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="foot">
+        <div>© <span id="year"></span> Persisto. All rights reserved.</div>
+        <div style="display:flex; gap:14px; flex-wrap:wrap;">
+          <a href="#problem">Problem</a>
+          <a href="#how">How it works</a>
+          <a href="#controls">Controls</a>
+          <a href="#outcomes">Outcomes</a>
+          <a href="#measure">Measure</a>
+          <a href="#evaluate">Evaluate</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
