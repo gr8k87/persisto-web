@@ -1,0 +1,1372 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trust Center | Persisto</title>
+  <style>
+    :root{
+      --paper: #F0EEE6;
+      --paper2:#F7F5EE;
+      --paper3:#ECE9E0;
+      --ink:   #0B1220;
+      --muted: rgba(11,18,32,.72);
+      --subtle:rgba(11,18,32,.55);
+
+      --stroke: rgba(11,18,32,.12);
+      --stroke2:rgba(11,18,32,.18);
+
+      --tile: rgba(255,255,255,.82);
+      --tile2: rgba(255,255,255,.90);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2:0 10px 28px rgba(11,18,32,.10);
+
+      --radius: 16px;
+      --radius2:22px;
+      --max: 1160px;
+
+      --accent: #E4572E; /* subtle nod to Federato CTA, but kept muted against Persisto palette */
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing:.2px;
+      line-height:1.45;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(var(--max), calc(100% - 48px)); margin-inline:auto; }
+
+    /* Top bar (Persisto styling) */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(10px);
+      background: rgba(240,238,230,.78);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap: 10px;
+      font-weight: 900;
+      letter-spacing:.4px;
+      color: var(--ink);
+      white-space:nowrap;
+    }
+    .logo{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(11,18,32,.08), rgba(11,18,32,.02));
+      border: 1px solid var(--stroke);
+    }
+    .tabs{
+      display:flex;
+      align-items:center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      flex-wrap:wrap;
+      justify-content:center;
+    }
+    .tab{
+      position:relative;
+      padding: 10px 6px;
+      border-radius: 10px;
+      transition: color .12s ease, background .12s ease;
+      cursor:pointer;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .tab:hover{ color: rgba(11,18,32,.92); }
+    .tab[aria-current="page"]{
+      color: rgba(11,18,32,.92);
+      font-weight: 900;
+    }
+    .tab[aria-current="page"]::after{
+      content:"";
+      position:absolute;
+      left: 6px;
+      right: 6px;
+      bottom: 2px;
+      height: 2px;
+      border-radius: 99px;
+      background: rgba(11,18,32,.82);
+      opacity:.9;
+    }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke2);
+      background: rgba(255,255,255,.55);
+      color: rgba(11,18,32,.90);
+      font-weight: 900;
+      font-size: 14px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space: nowrap;
+      cursor:pointer;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.72);
+      border-color: rgba(11,18,32,.24);
+    }
+    .btn-primary{
+      background: var(--accent);
+      border-color: var(--accent);
+      color: rgba(255,255,255,.95);
+    }
+    .btn-primary:hover{
+      background: rgba(228,87,46,.92);
+      border-color: rgba(228,87,46,.92);
+    }
+    .btn-quiet{
+      background: transparent;
+      border-color: transparent;
+      color: rgba(11,18,32,.74);
+    }
+    .btn-quiet:hover{
+      transform:none;
+      background: rgba(255,255,255,.45);
+      border-color: rgba(11,18,32,.12);
+    }
+
+    /* Page */
+    main{ padding: 26px 0 60px; }
+    .pagehead{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 16px;
+      margin: 22px 0 18px;
+      flex-wrap:wrap;
+    }
+    h1{
+      margin:0;
+      font-size: clamp(28px, 2.6vw, 36px);
+      letter-spacing: -0.6px;
+      line-height: 1.08;
+      font-weight: 950;
+    }
+    .lede{
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.65;
+      max-width: 92ch;
+    }
+
+    /* Layout similar to Federato overview */
+    .overview-grid{
+      display:grid;
+      grid-template-columns: 1.05fr 1.25fr;
+      gap: 16px;
+      align-items:start;
+      margin-top: 18px;
+    }
+    @media (max-width: 980px){
+      .tabs{ display:none; }
+      .overview-grid{ grid-template-columns: 1fr; }
+      .container{ width:min(var(--max), calc(100% - 32px)); }
+    }
+
+    /* Cards / tiles */
+    .card{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(11,18,32,.14);
+      background: var(--tile);
+      box-shadow: var(--shadow2);
+      padding: 18px;
+      position: relative;
+      overflow:hidden;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+      opacity: .95;
+    }
+    .card > *{ position:relative; z-index:1; }
+
+    .cardhead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    h2{
+      margin:0;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+      font-weight: 950;
+    }
+    .meta{
+      color: rgba(11,18,32,.55);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing:.2px;
+      white-space:nowrap;
+    }
+    .link{
+      color: rgba(11,18,32,.76);
+      font-size: 13px;
+      font-weight: 900;
+      border-radius: 10px;
+      padding: 6px 10px;
+      border: 1px solid transparent;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .link:hover{
+      background: rgba(255,255,255,.65);
+      border-color: rgba(11,18,32,.12);
+    }
+
+    /* Lists */
+    .list{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap: 10px; }
+    .item{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.12);
+      background: var(--tile2);
+    }
+    .item .title{
+      font-weight: 900;
+      font-size: 13px;
+      letter-spacing: .1px;
+      line-height: 1.25;
+    }
+    .item .sub{
+      margin-top: 4px;
+      color: rgba(11,18,32,.62);
+      font-size: 12.5px;
+      line-height: 1.35;
+      max-width: 70ch;
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(240,238,230,.70);
+      color: rgba(11,18,32,.70);
+      font-size: 12px;
+      font-weight: 900;
+      white-space:nowrap;
+    }
+
+    /* Compliance badges */
+    .badges{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-top: 6px;
+    }
+    .badge{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(255,255,255,.78);
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      min-width: 240px;
+    }
+    .badge:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.86);
+      border-color: rgba(11,18,32,.24);
+    }
+    .badge strong{ font-size: 13px; font-weight: 950; letter-spacing: .1px; }
+    .badge span{ color: rgba(11,18,32,.62); font-size: 12.5px; font-weight: 850; }
+    .seal{
+      width: 38px; height: 38px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: radial-gradient(12px 12px at 30% 25%, rgba(11,18,32,.10), rgba(11,18,32,.02)),
+                  rgba(240,238,230,.78);
+      display:grid;
+      place-items:center;
+      flex: 0 0 auto;
+    }
+    .seal svg{ width: 22px; height: 22px; opacity:.82; }
+
+    /* Controls preview cards (right column on overview) */
+    .control-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 980px){
+      .control-grid{ grid-template-columns: 1fr; }
+    }
+    .control-card{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(255,255,255,.78);
+      padding: 14px 14px 12px;
+    }
+    .control-card .k{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .control-card h3{
+      margin:0;
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+    }
+    .checks{ margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap: 8px; }
+    .check{
+      display:flex;
+      align-items:flex-start;
+      gap: 8px;
+      color: rgba(11,18,32,.74);
+      font-size: 13px;
+      line-height:1.35;
+      font-weight: 800;
+    }
+    .check svg{ margin-top: 1px; flex: 0 0 auto; }
+
+    /* Data collected block */
+    .data-block{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+    }
+    .data-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(255,255,255,.78);
+      font-weight: 900;
+      font-size: 13px;
+    }
+    .data-row .right{
+      display:flex; align-items:center; gap: 8px;
+      color: rgba(11,18,32,.62);
+      font-weight: 900;
+    }
+
+    /* Tabs content */
+    .view{ display:none; }
+    .view.is-active{ display:block; }
+
+    /* Resources: columns */
+    .resource-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 18px;
+    }
+    @media (max-width: 980px){
+      .resource-grid{ grid-template-columns: 1fr; }
+    }
+    .section{
+      margin-top: 12px;
+    }
+    .section h3{
+      margin: 0 0 10px;
+      font-size: 14px;
+      font-weight: 950;
+      letter-spacing: -0.2px;
+    }
+    .lock{
+      opacity:.8;
+      flex: 0 0 auto;
+      margin-top: 2px;
+    }
+    .doclink{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .doclink:hover .title{ text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+    .footnote{
+      margin-top: 18px;
+      color: rgba(11,18,32,.58);
+      font-size: 12.5px;
+      line-height: 1.55;
+    }
+
+    /* Modal */
+    .modal-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(11,18,32,.40);
+      display:none;
+      align-items: center;
+      justify-content:center;
+      padding: 16px;
+      z-index: 80;
+    }
+    .modal-backdrop.is-open{ display:flex; }
+    .modal{
+      width: min(640px, 100%);
+      border-radius: 18px;
+      border: 1px solid rgba(11,18,32,.18);
+      background: rgba(247,245,238,.96);
+      box-shadow: 0 26px 110px rgba(11,18,32,.26);
+      overflow:hidden;
+    }
+    .modal-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid rgba(11,18,32,.12);
+    }
+    .modal-head h2{ font-size: 16px; margin:0; font-weight: 950; }
+    .x{
+      border: 1px solid transparent;
+      background: transparent;
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-size: 18px;
+      color: rgba(11,18,32,.70);
+    }
+    .x:hover{ background: rgba(255,255,255,.65); border-color: rgba(11,18,32,.12); }
+    .modal-body{ padding: 14px 16px 16px; }
+    .modal-sub{
+      margin: 0 0 10px;
+      color: rgba(11,18,32,.62);
+      font-size: 13px;
+      font-weight: 850;
+    }
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .field{ display:flex; flex-direction:column; gap: 6px; }
+    label{
+      font-size: 12px;
+      color: rgba(11,18,32,.62);
+      font-weight: 900;
+      letter-spacing: .2px;
+    }
+    input, select{
+      width:100%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(11,18,32,.16);
+      background: rgba(255,255,255,.86);
+      color: rgba(11,18,32,.92);
+      font-weight: 850;
+      font-size: 13px;
+      outline: none;
+    }
+    input:focus, select:focus{
+      border-color: rgba(228,87,46,.55);
+      box-shadow: 0 0 0 4px rgba(228,87,46,.12);
+    }
+    .full{ grid-column: 1 / -1; }
+    .panel{
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(255,255,255,.60);
+    }
+    .panel h3{
+      margin: 0 0 10px;
+      font-size: 13px;
+      font-weight: 950;
+    }
+    .radios{ display:flex; gap: 14px; flex-wrap:wrap; }
+    .radio{
+      display:flex; align-items:center; gap: 8px;
+      font-weight: 900;
+      color: rgba(11,18,32,.74);
+      font-size: 13px;
+    }
+    .modal-actions{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      margin-top: 14px;
+      flex-wrap:wrap;
+    }
+    .reclaim{
+      font-size: 12.5px;
+      color: rgba(11,18,32,.62);
+      font-weight: 850;
+    }
+    .reclaim a{ text-decoration: underline; text-underline-offset: 2px; }
+    .right-actions{ display:flex; gap: 10px; }
+    footer{
+      padding: 18px 0 26px;
+      color: rgba(11,18,32,.55);
+      font-size: 12.5px;
+      border-top: 1px solid rgba(11,18,32,.12);
+      background: var(--paper3);
+    }
+    .foot{
+      display:flex;
+      justify-content:space-between;
+      gap: 12px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#" aria-label="Persisto Trust Center Home">
+          <span class="logo" aria-hidden="true"></span>
+          <span>Persisto</span>
+          <span style="color:rgba(11,18,32,.40); font-weight:900;">|</span>
+          <span style="font-weight:950;">Trust Center</span>
+        </a>
+
+        <nav class="tabs" aria-label="Trust Center tabs">
+          <div class="tab" role="button" tabindex="0" data-tab="overview" aria-current="page">Overview</div>
+          <div class="tab" role="button" tabindex="0" data-tab="resources">Resources</div>
+          <div class="tab" role="button" tabindex="0" data-tab="controls">Controls</div>
+          <div class="tab" role="button" tabindex="0" data-tab="subprocessors">Subprocessors</div>
+        </nav>
+
+        <div style="display:flex; align-items:center; gap: 10px;">
+          <button class="btn btn-primary" id="ctaRequestAccess">Request access</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="pagehead">
+      <div>
+        <h1 id="pageTitle">Trust Center</h1>
+        <p class="lede" id="pageLede">
+          Centralized security and compliance resources for vendor due diligence. Most documents are shared upon request.
+        </p>
+      </div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section class="view is-active" id="view-overview" aria-label="Overview">
+      <div class="overview-grid">
+        <!-- LEFT: compliance + resources preview -->
+        <div style="display:flex; flex-direction:column; gap: 16px;">
+          <div class="card" aria-label="Compliance">
+            <div class="cardhead">
+              <h2>Compliance</h2>
+            </div>
+
+            <div class="badges">
+              <div class="badge js-request" data-resource="SOC 2 Type II Report" data-reason="Compliance report request" role="button" tabindex="0" aria-label="SOC 2 Type II request">
+                <div class="seal" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l8 4v6c0 5-3.5 9.4-8 10-4.5-.6-8-5-8-10V6l8-4z"></path>
+                    <path d="M9.5 12l1.8 1.8L15 10"></path>
+                  </svg>
+                </div>
+                <div>
+                  <strong>SOC 2 (Type II)</strong><br/>
+                  <span>Report available upon request</span>
+                </div>
+              </div>
+
+              <div class="badge js-request" data-resource="ISO/IEC 27001 Certificate" data-reason="Compliance report request" role="button" tabindex="0" aria-label="ISO 27001 request">
+                <div class="seal" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l8 4v6c0 5-3.5 9.4-8 10-4.5-.6-8-5-8-10V6l8-4z"></path>
+                    <path d="M9.5 12l1.8 1.8L15 10"></path>
+                  </svg>
+                </div>
+                <div>
+                  <strong>ISO/IEC 27001</strong><br/>
+                  <span>Certificate available upon request</span>
+                </div>
+              </div>
+            </div>
+
+            <p class="footnote" style="margin-top:12px;">
+              Request access to receive reports and supporting evidence under standard confidentiality terms.
+            </p>
+          </div>
+
+          <div class="card" aria-label="Resources preview">
+            <div class="cardhead">
+              <h2>Resources</h2>
+              <button class="link" data-goto="resources">View all resources</button>
+            </div>
+
+            <div class="section">
+              <h3>Policies & standards</h3>
+              <ul class="list">
+                <li class="item doclink js-request" data-resource="Information Security Policy" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Information Security Policy</div>
+                    <div class="sub">Security program scope, governance, and policy management.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Data Privacy & Protection Policy" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Data Privacy & Protection Policy</div>
+                    <div class="sub">Privacy commitments for customer and business data.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Incident Management Plan" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Incident Management Plan</div>
+                    <div class="sub">Detection, response, escalation, and customer notification process.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+              </ul>
+            </div>
+
+            <p class="footnote">
+              Additional documents (Secure SDLC, Change Management, AI Governance, Third Party Processor Management, Training Plan, BYOD addendum) are available in the Resources tab.
+            </p>
+          </div>
+        </div>
+
+        <!-- RIGHT: controls preview + data collected + subprocessors preview -->
+        <div style="display:flex; flex-direction:column; gap: 16px;">
+          <div class="card" aria-label="Controls preview">
+            <div class="cardhead">
+              <div style="display:flex; align-items:center; gap: 10px;">
+                <h2>Controls</h2>
+                <span class="meta">Updated recently</span>
+              </div>
+              <button class="link" data-goto="controls">View all controls</button>
+            </div>
+
+            <div class="control-grid">
+              <div class="control-card">
+                <div class="k">
+                  <h3>Program governance</h3>
+                  <span class="pill">9</span>
+                </div>
+                <ul class="checks">
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Security program policy maintained
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Security & privacy training program maintained
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Third-party processor oversight defined
+                  </li>
+                </ul>
+              </div>
+
+              <div class="control-card">
+                <div class="k">
+                  <h3>Product & engineering</h3>
+                  <span class="pill">8</span>
+                </div>
+                <ul class="checks">
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Secure SDLC policy defined
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Change management controls defined
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Incident management process defined
+                  </li>
+                </ul>
+              </div>
+
+              <div class="control-card">
+                <div class="k">
+                  <h3>Data governance</h3>
+                  <span class="pill">7</span>
+                </div>
+                <ul class="checks">
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Data classification & handling standard defined
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Data privacy & protection standard defined
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    AI governance policy defined
+                  </li>
+                </ul>
+              </div>
+
+              <div class="control-card">
+                <div class="k">
+                  <h3>Internal procedures</h3>
+                  <span class="pill">6</span>
+                </div>
+                <ul class="checks">
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    BYOD approved software controls defined
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Third-party processor management policy maintained
+                  </li>
+                  <li class="check">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                      <path d="M20 6L9 17l-5-5"></path>
+                    </svg>
+                    Security documentation and evidence pack available upon request
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" aria-label="Data collected">
+            <div class="cardhead">
+              <h2>Data collected</h2>
+            </div>
+            <div class="data-block">
+              <div class="data-row">
+                <span>Customer business personally identifiable information (PII)</span>
+                <span class="right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2">
+                    <path d="M20 6L9 17l-5-5"></path>
+                  </svg>
+                  Collected
+                </span>
+              </div>
+              <div class="data-row">
+                <span>Credit card information</span>
+                <span class="right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.70)" stroke-width="2">
+                    <path d="M6 6l12 12M18 6L6 18"></path>
+                  </svg>
+                  Not collected
+                </span>
+              </div>
+              <div class="data-row">
+                <span>Personal health information (PHI)</span>
+                <span class="right">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.70)" stroke-width="2">
+                    <path d="M6 6l12 12M18 6L6 18"></path>
+                  </svg>
+                  Not collected
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" aria-label="Subprocessors preview">
+            <div class="cardhead">
+              <h2>Subprocessors</h2>
+              <button class="link" data-goto="subprocessors">View all</button>
+            </div>
+            <ul class="list">
+              <li class="item">
+                <div>
+                  <div class="title">Cloud infrastructure provider</div>
+                  <div class="sub">Hosting and storage for Persisto services.</div>
+                </div>
+                <span class="pill">To confirm</span>
+              </li>
+              <li class="item">
+                <div>
+                  <div class="title">Authentication & access management</div>
+                  <div class="sub">User authentication, authorization, and SSO.</div>
+                </div>
+                <span class="pill">To confirm</span>
+              </li>
+              <li class="item">
+                <div>
+                  <div class="title">Email delivery and notifications</div>
+                  <div class="sub">Transactional notifications (e.g., support, alerts).</div>
+                </div>
+                <span class="pill">To confirm</span>
+              </li>
+              <li class="item">
+                <div>
+                  <div class="title">Source code management / CI</div>
+                  <div class="sub">Engineering workflow and secure development operations.</div>
+                </div>
+                <span class="pill">To confirm</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESOURCES -->
+    <section class="view" id="view-resources" aria-label="Resources">
+      <div class="card">
+        <div class="cardhead">
+          <h2>Resources</h2>
+          <span class="meta">Shared upon request</span>
+        </div>
+
+        <div class="resource-grid">
+          <div>
+            <div class="section">
+              <h3>Policies & standards</h3>
+              <ul class="list">
+                <li class="item doclink js-request" data-resource="Information Security Policy" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Information Security Policy</div>
+                    <div class="sub">Security program scope, governance, and policy management.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Data Privacy & Protection Policy (Internal)" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Data Privacy & Protection Policy</div>
+                    <div class="sub">Commitments for business PII and customer data processing.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Data Classification & Handling Policy" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Data Classification & Handling Policy</div>
+                    <div class="sub">How data is classified, handled, retained, and disposed.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3>Operational readiness</h3>
+              <ul class="list">
+                <li class="item doclink js-request" data-resource="Incident Management Plan" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Incident Management Plan</div>
+                    <div class="sub">Incident response, escalation, and notification.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Secure SDLC Policy" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Secure SDLC Policy</div>
+                    <div class="sub">Secure development lifecycle and engineering controls.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Change Management Policy" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Change Management Policy</div>
+                    <div class="sub">Controlled deployment and production change governance.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h3>Governance</h3>
+              <ul class="list">
+                <li class="item doclink js-request" data-resource="AI Governance Policy" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">AI Governance Policy</div>
+                    <div class="sub">AI policy posture and governance expectations.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Third Party Processor Management Policy" data-reason="Subprocessor or data residency review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Third Party Processor Management Policy</div>
+                    <div class="sub">Third-party risk management and processor oversight.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Security & Privacy Training Plan" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Security & Privacy Training Plan</div>
+                    <div class="sub">Training requirements and cadence.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="BYOD Approved Software Policy Addendum" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">BYOD Approved Software Addendum</div>
+                    <div class="sub">Endpoint and approved software posture for corporate devices.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3>Reports & assessments</h3>
+              <ul class="list">
+                <li class="item doclink js-request" data-resource="SOC 2 Type II Report" data-reason="Compliance report request" role="button" tabindex="0">
+                  <div>
+                    <div class="title">SOC 2 Type II Report</div>
+                    <div class="sub">Independent assurance report (shared upon request).</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="ISO/IEC 27001 Certificate" data-reason="Compliance report request" role="button" tabindex="0">
+                  <div>
+                    <div class="title">ISO/IEC 27001 Certificate</div>
+                    <div class="sub">Certification details (shared upon request).</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+
+                <li class="item doclink js-request" data-resource="Penetration test summary" data-reason="Pen test / assessment request" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Penetration test summary</div>
+                    <div class="sub">Executive summary and remediation status (if applicable).</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p class="footnote">
+          All requests route through a single intake workflow. Access can be granted as limited (specific documents) or full (all resources).
+        </p>
+      </div>
+    </section>
+
+    <!-- CONTROLS -->
+    <section class="view" id="view-controls" aria-label="Controls">
+      <div class="card">
+        <div class="cardhead">
+          <h2>Controls</h2>
+          <span class="meta">High-level summaries</span>
+        </div>
+
+        <div class="resource-grid">
+          <div>
+            <div class="section">
+              <h3>Program governance</h3>
+              <ul class="checks">
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Information security program policy maintained</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Security and privacy training program maintained</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Third-party processor oversight defined</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Security documentation and evidence pack available upon request</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3>Product & engineering</h3>
+              <ul class="checks">
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Secure SDLC policy defined</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Change management controls defined</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Incident management process defined</li>
+              </ul>
+            </div>
+          </div>
+
+          <div>
+            <div class="section">
+              <h3>Data governance</h3>
+              <ul class="checks">
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Business PII processed; privacy policy maintained</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Data classification and handling standard defined</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>PHI is not processed (by design)</li>
+                <li class="check"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.85)" stroke-width="2"><path d="M20 6L9 17l-5-5"></path></svg>Credit card data is not processed</li>
+              </ul>
+            </div>
+
+            <div class="section">
+              <h3>Request controls evidence</h3>
+              <ul class="list">
+                <li class="item doclink js-request" data-resource="Controls evidence pack" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">Request controls evidence pack</div>
+                    <div class="sub">Policy set + supporting evidence appropriate to your diligence scope.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p class="footnote">
+          These control summaries describe the existence of governed policies and programs. Detailed evidence is provided through the request workflow.
+        </p>
+      </div>
+    </section>
+
+    <!-- SUBPROCESSORS -->
+    <section class="view" id="view-subprocessors" aria-label="Subprocessors">
+      <div class="card">
+        <div class="cardhead">
+          <h2>Subprocessors</h2>
+          <span class="meta">Initial placeholders (review pending)</span>
+        </div>
+
+        <ul class="list">
+          <li class="item">
+            <div>
+              <div class="title">Cloud infrastructure provider</div>
+              <div class="sub">Hosting and storage for Persisto services.</div>
+            </div>
+            <span class="pill">To confirm</span>
+          </li>
+          <li class="item">
+            <div>
+              <div class="title">Authentication & access management</div>
+              <div class="sub">User authentication, authorization, and SSO.</div>
+            </div>
+            <span class="pill">To confirm</span>
+          </li>
+          <li class="item">
+            <div>
+              <div class="title">Email delivery and notifications</div>
+              <div class="sub">Transactional communications.</div>
+            </div>
+            <span class="pill">To confirm</span>
+          </li>
+          <li class="item">
+            <div>
+              <div class="title">Source code management / CI</div>
+              <div class="sub">Engineering workflow tooling.</div>
+            </div>
+            <span class="pill">To confirm</span>
+          </li>
+          <li class="item">
+            <div>
+              <div class="title">Monitoring / error tracking</div>
+              <div class="sub">Operational telemetry for service health.</div>
+            </div>
+            <span class="pill">To confirm</span>
+          </li>
+          <li class="item">
+            <div>
+              <div class="title">Support ticketing</div>
+              <div class="sub">Customer support and issue handling.</div>
+            </div>
+            <span class="pill">To confirm</span>
+          </li>
+        </ul>
+
+        <p class="footnote">
+          Replace placeholder entries with your confirmed vendor list and regions/countries when ready.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Request access modal -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <h2 id="modalTitle">Request access</h2>
+        <button class="x" id="modalClose" aria-label="Close">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="modal-sub" id="modalContext">Request access to resources.</p>
+
+        <form class="form" id="accessForm">
+          <div class="field">
+            <label for="firstName">First name</label>
+            <input id="firstName" name="firstName" autocomplete="given-name" required />
+          </div>
+          <div class="field">
+            <label for="lastName">Last name</label>
+            <input id="lastName" name="lastName" autocomplete="family-name" required />
+          </div>
+          <div class="field full">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </div>
+          <div class="field full">
+            <label for="company">Company name</label>
+            <input id="company" name="company" autocomplete="organization" required />
+          </div>
+          <div class="field full">
+            <label for="reason">Reason</label>
+            <select id="reason" name="reason" required>
+              <option value="" selected>Select a reason</option>
+              <option>Vendor due diligence / security review</option>
+              <option>Procurement or RFP requirement</option>
+              <option>Legal review (DPA / MSA / SLA)</option>
+              <option>Customer onboarding requirement</option>
+              <option>Compliance report request</option>
+              <option>Pen test / assessment request</option>
+              <option>Subprocessor or data residency review</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="panel full">
+            <h3>Resources</h3>
+            <div class="field" style="margin-top:8px;">
+              <label style="display:flex; align-items:center; gap:8px;">
+                <span style="font-weight:900; color: rgba(11,18,32,.70);">Access level</span>
+                <span class="meta" style="margin-left:auto;">(controls what is shared)</span>
+              </label>
+              <div class="radios">
+                <label class="radio"><input type="radio" name="accessLevel" value="Full access" checked /> Full access</label>
+                <label class="radio"><input type="radio" name="accessLevel" value="Limited access" /> Limited access</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-actions full">
+            <div class="reclaim">Already have access? <a href="#" onclick="alert('Placeholder: reclaim access flow'); return false;">Reclaim access</a></div>
+            <div class="right-actions">
+              <button type="button" class="btn" id="modalCancel">Cancel</button>
+              <button type="submit" class="btn btn-primary">Request access</button>
+            </div>
+          </div>
+        </form>
+
+        <p class="footnote" style="margin-top:10px;">
+          This is a static HTML prototype. Wire this form to your CRM/security mailbox and document delivery workflow.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <div class="foot">
+        <div>© <span id="year"></span> Persisto. Trust Center.</div>
+        <div style="display:flex; gap: 12px; flex-wrap:wrap;">
+          <button class="btn btn-quiet" data-goto="overview">Overview</button>
+          <button class="btn btn-quiet" data-goto="resources">Resources</button>
+          <button class="btn btn-quiet" data-goto="controls">Controls</button>
+          <button class="btn btn-quiet" data-goto="subprocessors">Subprocessors</button>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Utilities
+    const $ = (s, r=document) => r.querySelector(s);
+    const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
+
+    const views = {
+      overview: $("#view-overview"),
+      resources: $("#view-resources"),
+      controls: $("#view-controls"),
+      subprocessors: $("#view-subprocessors"),
+    };
+
+    function setTab(name){
+      // tabs
+      $$(".tab").forEach(t => t.setAttribute("aria-current", t.dataset.tab === name ? "page" : "false"));
+      // views
+      Object.entries(views).forEach(([k,v]) => v.classList.toggle("is-active", k === name));
+      // title
+      const titleMap = {
+        overview: ["Trust Center", "Centralized security and compliance resources for vendor due diligence. Most documents are shared upon request."],
+        resources: ["Resources", "Policies, reports, and supporting materials shared through the request workflow."],
+        controls: ["Controls", "High-level control summaries; detailed evidence is provided upon request."],
+        subprocessors: ["Subprocessors", "Initial placeholder list; replace with confirmed vendor names and regions."],
+      };
+      const [t,l] = titleMap[name] || titleMap.overview;
+      $("#pageTitle").textContent = t;
+      $("#pageLede").textContent = l;
+      window.scrollTo({top: 0, behavior: "smooth"});
+    }
+
+    // Tab click handlers
+    $$(".tab").forEach(t => {
+      t.addEventListener("click", () => setTab(t.dataset.tab));
+      t.addEventListener("keydown", (e) => { if(e.key === "Enter" || e.key === " ") setTab(t.dataset.tab); });
+    });
+
+    // Footer goto buttons and inline links
+    $$("[data-goto]").forEach(b => {
+      b.addEventListener("click", () => setTab(b.dataset.goto));
+    });
+
+    // Modal
+    const backdrop = $("#modalBackdrop");
+    const modalClose = $("#modalClose");
+    const modalCancel = $("#modalCancel");
+    const cta = $("#ctaRequestAccess");
+    const modalContext = $("#modalContext");
+    const reasonSelect = $("#reason");
+
+    function openModal(resource=null, reason=null){
+      modalContext.textContent = resource ? `Request access to: ${resource}` : "Request access to resources.";
+      if(reason){
+        // try to select exact match; if not, keep placeholder
+        const opts = Array.from(reasonSelect.options).map(o => o.textContent.trim());
+        const idx = opts.findIndex(x => x === reason);
+        if(idx > -1) reasonSelect.selectedIndex = idx;
+      } else {
+        reasonSelect.selectedIndex = 0;
+      }
+      backdrop.classList.add("is-open");
+      backdrop.setAttribute("aria-hidden", "false");
+      $("#firstName").focus();
+    }
+    function closeModal(){
+      backdrop.classList.remove("is-open");
+      backdrop.setAttribute("aria-hidden", "true");
+    }
+
+    cta.addEventListener("click", () => openModal(null, null));
+    modalClose.addEventListener("click", closeModal);
+    modalCancel.addEventListener("click", closeModal);
+    backdrop.addEventListener("click", (e) => { if(e.target === backdrop) closeModal(); });
+    document.addEventListener("keydown", (e) => { if(e.key === "Escape" && backdrop.classList.contains("is-open")) closeModal(); });
+
+    // Document clicks / badge clicks
+    $$(".js-request").forEach(el => {
+      el.addEventListener("click", () => openModal(el.dataset.resource || null, el.dataset.reason || null));
+      el.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " ") openModal(el.dataset.resource || null, el.dataset.reason || null);
+      });
+    });
+
+    // Form (prototype submit)
+    $("#accessForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = Object.fromEntries(new FormData(e.target).entries());
+      // Prototype behavior: show a simple confirmation.
+      alert(`Request captured (prototype):\n\nName: ${data.firstName} ${data.lastName}\nEmail: ${data.email}\nCompany: ${data.company}\nReason: ${data.reason}\nAccess: ${data.accessLevel}`);
+      closeModal();
+      e.target.reset();
+      reasonSelect.selectedIndex = 0;
+    });
+
+    // Init
+    document.getElementById("year").textContent = new Date().getFullYear();
+    setTab("overview");
+  </script>
+</body>
+</html>
