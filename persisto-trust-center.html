@@ -567,7 +567,7 @@
           <div class="tab" role="button" tabindex="0" data-tab="overview" aria-current="page">Overview</div>
           <div class="tab" role="button" tabindex="0" data-tab="resources">Resources</div>
           <div class="tab" role="button" tabindex="0" data-tab="controls">Controls</div>
-          <div class="tab" role="button" tabindex="0" data-tab="subprocessors">Subprocessors</div>
+          
         </nav>
 
         <div style="display:flex; align-items:center; gap: 10px;">
@@ -852,40 +852,29 @@
             </div>
           </div>
 
-          <div class="card" aria-label="Subprocessors preview">
+                    <div class="card" aria-label="Resources preview">
             <div class="cardhead">
-              <h2>Subprocessors</h2>
-              <button class="link" data-goto="subprocessors">View all</button>
+              <h2>SubProcessors</h2>
+            
             </div>
-            <ul class="list">
-              <li class="item">
-                <div>
-                  <div class="title">Cloud infrastructure provider</div>
-                  <div class="sub">Hosting and storage for Persisto services.</div>
-                </div>
-                <span class="pill">To confirm</span>
-              </li>
-              <li class="item">
-                <div>
-                  <div class="title">Authentication & access management</div>
-                  <div class="sub">User authentication, authorization, and SSO.</div>
-                </div>
-                <span class="pill">To confirm</span>
-              </li>
-              <li class="item">
-                <div>
-                  <div class="title">Email delivery and notifications</div>
-                  <div class="sub">Transactional notifications (e.g., support, alerts).</div>
-                </div>
-                <span class="pill">To confirm</span>
-              </li>
-              <li class="item">
-                <div>
-                  <div class="title">Source code management / CI</div>
-                  <div class="sub">Engineering workflow and secure development operations.</div>
-                </div>
-                <span class="pill">To confirm</span>
-              </li>
+
+            <div class="section">
+              <ul class="list">
+                 <li class="item doclink js-request" data-resource="Business Continuity & Disaster Recovery Plan" data-reason="Vendor due diligence / security review" role="button" tabindex="0">
+                  <div>
+                    <div class="title">List of SubProcessors</div>
+                    <div class="sub">A list of trusted third-party subprocessors we use, along with information about their services and data protection responsibilities.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    
             </ul>
           </div>
         </div>
@@ -1111,6 +1100,26 @@
                 </li>
               </ul>
             </div>
+            
+
+        <div class="section">
+         
+          
+          <h3>SubProcessors</h3>
+              <ul class="list">
+                <li class="item doclink js-request" data-resource="SOC 2 Type II Report" data-reason="Compliance report request" role="button" tabindex="0">
+                  <div>
+                    <div class="title"> List of SubProcessors</div>
+                    <div class="sub">A list of trusted third-party subprocessors we use, along with information about their services and data protection responsibilities.</div>
+                  </div>
+                  <svg class="lock" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(11,18,32,.75)" stroke-width="2">
+                    <path d="M7 11V8a5 5 0 0 1 10 0v3"></path>
+                    <path d="M6 11h12v10H6z"></path>
+                  </svg>
+                </li>          
+              </ul>
+            </div>
+            
           </div>
         </div>
       </div>
@@ -1184,64 +1193,7 @@
       </div>
     </section>
 
-    <!-- SUBPROCESSORS -->
-    <section class="view" id="view-subprocessors" aria-label="Subprocessors">
-      <div class="card">
-        <div class="cardhead">
-          <h2>Subprocessors</h2>
-          <span class="meta">Initial placeholders (review pending)</span>
-        </div>
-
-        <ul class="list">
-          <li class="item">
-            <div>
-              <div class="title">Cloud infrastructure provider</div>
-              <div class="sub">Hosting and storage for Persisto services.</div>
-            </div>
-            <span class="pill">To confirm</span>
-          </li>
-          <li class="item">
-            <div>
-              <div class="title">Authentication & access management</div>
-              <div class="sub">User authentication, authorization, and SSO.</div>
-            </div>
-            <span class="pill">To confirm</span>
-          </li>
-          <li class="item">
-            <div>
-              <div class="title">Email delivery and notifications</div>
-              <div class="sub">Transactional communications.</div>
-            </div>
-            <span class="pill">To confirm</span>
-          </li>
-          <li class="item">
-            <div>
-              <div class="title">Source code management / CI</div>
-              <div class="sub">Engineering workflow tooling.</div>
-            </div>
-            <span class="pill">To confirm</span>
-          </li>
-          <li class="item">
-            <div>
-              <div class="title">Monitoring / error tracking</div>
-              <div class="sub">Operational telemetry for service health.</div>
-            </div>
-            <span class="pill">To confirm</span>
-          </li>
-          <li class="item">
-            <div>
-              <div class="title">Support ticketing</div>
-              <div class="sub">Customer support and issue handling.</div>
-            </div>
-            <span class="pill">To confirm</span>
-          </li>
-        </ul>
-
-        <p class="footnote">
-          Replace placeholder entries with your confirmed vendor list and regions/countries when ready.
-        </p>
-      </div>
-    </section>
+    
   </main>
 
   <!-- Request access modal -->
@@ -1334,7 +1286,7 @@
           <button class="btn btn-quiet" data-goto="overview">Overview</button>
           <button class="btn btn-quiet" data-goto="resources">Resources</button>
           <button class="btn btn-quiet" data-goto="controls">Controls</button>
-          <button class="btn btn-quiet" data-goto="subprocessors">Subprocessors</button>
+        
         </div>
       </div>
     </div>
