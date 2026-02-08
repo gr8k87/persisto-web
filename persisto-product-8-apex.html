@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APEX — Algorithmic Pricing & Execution Engine | Persisto</title>
+
+  <!--
+  NOTE:
+  This page intentionally mirrors the structure, layout, and visual system
+  of the provided VERA reference page. Only product-specific copy has changed.
+  -->
+
+   <style>
+    :root{
+      --paper: #F0EEE6;
+      --paper2:#F7F5EE;
+      --paper3:#ECE9E0;
+      --ink:   #0B1220;
+      --muted: rgba(11,18,32,.72);
+      --subtle:rgba(11,18,32,.55);
+
+      --stroke: rgba(11,18,32,.12);
+      --stroke2:rgba(11,18,32,.18);
+
+      --tile2: rgba(255,255,255,.86);
+
+      --shadow: 0 18px 60px rgba(11,18,32,.10);
+      --shadow2:0 10px 28px rgba(11,18,32,.10);
+
+      --radius: 16px;
+      --radius2:22px;
+      --max: 1120px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background: var(--paper);
+      color: var(--ink);
+      letter-spacing:.2px;
+      line-height:1.45;
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .container{ width:min(var(--max), calc(100% - 48px)); margin-inline:auto; }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: rgba(240,238,230,.78);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+    .brand{
+      display:flex; align-items:center; gap: 10px;
+      font-weight: 850;
+      letter-spacing:.4px;
+      color: var(--ink);
+    }
+    .logo{
+      width: 30px; height: 30px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(11,18,32,.08), rgba(11,18,32,.02));
+      border: 1px solid var(--stroke);
+    }
+    .navlinks{
+      display:flex; align-items:center; gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      flex-wrap:wrap;
+    }
+    .navlinks a:hover{ color: rgba(11,18,32,.92); }
+    .navcta{ display:flex; gap: 10px; align-items:center; }
+
+    /* Buttons */
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--stroke2);
+      background: rgba(255,255,255,.55);
+      color: rgba(11,18,32,.90);
+      font-weight: 850;
+      font-size: 14px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space: nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.72);
+      border-color: rgba(11,18,32,.24);
+    }
+    .btn-primary{
+      background: var(--ink);
+      border-color: var(--ink);
+      color: rgba(240,238,230,.95);
+    }
+    .btn-primary:hover{
+      background: rgba(11,18,32,.92);
+      border-color: rgba(11,18,32,.92);
+    }
+
+    /* Section bands + dividers */
+    section{ padding: 84px 0; }
+    .band-1{ background: var(--paper); }
+    .band-2{ background: var(--paper2); box-shadow: inset 0 1px 0 rgba(255,255,255,.75); }
+    .band-3{ background: var(--paper3); box-shadow: inset 0 1px 0 rgba(255,255,255,.75); }
+    .section-divider{
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(11,18,32,.14), transparent);
+    }
+    .anchor{ scroll-margin-top: 88px; }
+
+    /* Typographic system */
+    .kicker{
+      display:inline-flex;
+      align-items:center;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.55);
+      color: rgba(11,18,32,.78);
+      font-weight: 850;
+      font-size: 12px;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+    }
+    h1{
+      margin: 16px 0 0;
+      font-size: clamp(36px, 4.0vw, 54px);
+      line-height: 1.05;
+      letter-spacing: -0.95px;
+    }
+    h2{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 2.4vw, 34px);
+      letter-spacing: -0.6px;
+      line-height: 1.12;
+    }
+    .lede{
+      margin: 12px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      max-width: 82ch;
+    }
+    .section-head{
+      text-align: center;
+      margin-bottom: 26px;
+      display:flex;
+      justify-content:center;
+    }
+    .section-head > div{ max-width: 82ch; }
+
+    /* Layout */
+    .hero{ padding-top: 58px; padding-bottom: 72px; }
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 34px;
+      align-items:center;
+    }
+    .hero-actions{
+      display:flex;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 18px;
+    }
+    .grid-3{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    /* Tiles */
+    .tile{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,18,32,.14);
+      background: var(--tile2);
+      box-shadow: var(--shadow2);
+      padding: 18px;
+      position: relative;
+      overflow:hidden;
+    }
+    .tile:before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border-radius: inherit;
+      pointer-events:none;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
+      opacity: .9;
+    }
+    .tile h3{
+      margin: 0 0 10px;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+      position: relative;
+      z-index: 1;
+    }
+    .tile p{
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Icon frame for problem cards */
+    .icon-frame{
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(240,238,230,.70);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom: 12px;
+      overflow:hidden;
+      position: relative;
+      z-index: 1;
+    }
+    .icon-frame svg{ width: 100%; height: 100%; }
+
+    /* Media placeholder */
+    .media-frame{
+      position: relative;
+      border-radius: 18px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.56));
+      box-shadow: var(--shadow2);
+      overflow: hidden;
+      isolation: isolate;
+      min-height: 410px;
+    }
+    .media-frame img{
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      opacity: .98;
+    }
+    .media-label{
+      position: absolute;
+      inset: auto 14px 14px 14px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(240,238,230,.86);
+      color: rgba(11,18,32,.72);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .3px;
+      pointer-events: none;
+      width: fit-content;
+      max-width: calc(100% - 28px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* PROBLEM REALITY BAND — editorial split */
+    .fact-band{
+      border-top: 1px solid rgba(11,18,32,.10);
+      border-bottom: 1px solid rgba(11,18,32,.10);
+      background:
+        radial-gradient(900px 320px at 18% -10%, rgba(11,18,32,.08), transparent 60%),
+        radial-gradient(700px 260px at 88% 20%, rgba(15,42,95,.10), transparent 55%),
+        rgba(255,255,255,.66);
+    }
+    .fact-wrap{ padding: 44px 0; }
+    .fact-split{
+      display:grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+    .fact-rule{
+      background: rgba(11,18,32,.14);
+      border-radius: 999px;
+    }
+    .fact-block{
+      padding: 4px 10px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height: 128px;
+    }
+    .fact{
+      font-size: clamp(24px, 2.3vw, 30px);
+      line-height: 1.10;
+      letter-spacing: -0.55px;
+      font-weight: 900;
+      color: rgba(11,18,32,.94);
+      margin: 0;
+    }
+    .source{
+      margin-top: 14px;
+      font-size: 12px;
+      color: rgba(11,18,32,.52);
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    /* CHANGE */
+    .tile-compact h3{ font-size: 15px; }
+    .tile-compact p{ font-size: 14px; }
+
+    /* MEASURE */
+    .measure-grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+    .bullets{
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: none;
+    }
+    .bullets li{ margin: 8px 0; }
+
+    .aside{
+      border-radius: var(--radius);
+      border: 1px solid rgba(11,18,32,.12);
+      background: rgba(240,238,230,.60);
+      padding: 18px;
+    }
+    .aside h3{
+      margin: 0 0 10px;
+      font-size: 15px;
+      letter-spacing: -0.2px;
+    }
+
+    /* QUOTE BAND — standalone signature band */
+    .quote-band{
+      background:
+        radial-gradient(1100px 420px at 20% -10%, rgba(11,18,32,.10), transparent 62%),
+        radial-gradient(900px 340px at 85% 10%, rgba(46,111,126,.12), transparent 55%),
+        rgba(255,255,255,.72);
+      border-top: 1px solid rgba(11,18,32,.10);
+      border-bottom: 1px solid rgba(11,18,32,.10);
+    }
+    .quote-wrap{
+      padding: 72px 0;
+      text-align:center;
+    }
+    .quote-big{
+      margin: 0 auto;
+      max-width: 36ch;
+      font-size: clamp(30px, 3.0vw, 44px);
+      line-height: 1.06;
+      letter-spacing: -0.95px;
+      font-weight: 950;
+      color: rgba(11,18,32,.94);
+    }
+    .quote-big .light{
+      font-weight: 850;
+      color: rgba(11,18,32,.86);
+    }
+    .quote-sub{
+      margin: 14px auto 0;
+      max-width: 72ch;
+      color: rgba(11,18,32,.70);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+
+    /* CTA */
+    .cta{
+      border-radius: 26px;
+      border: 1px solid rgba(11,18,32,.20);
+      background:
+        radial-gradient(1100px 380px at 18% -10%, rgba(11,18,32,.09), transparent 60%),
+        radial-gradient(900px 340px at 85% 10%, rgba(46,111,126,.12), transparent 55%),
+        rgba(255,255,255,.86);
+      box-shadow: 0 26px 90px rgba(11,18,32,.14);
+      padding: 44px 34px;
+      text-align:center;
+    }
+    .cta p{
+      margin: 0;
+      color: rgba(11,18,32,.74);
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    .cta-actions{
+      display:flex;
+      justify-content:center;
+      gap: 12px;
+      flex-wrap:wrap;
+      margin-top: 18px;
+    }
+
+    footer{
+      padding: 28px 0 40px;
+      color: var(--subtle);
+      font-size: 13px;
+      border-top: 1px solid var(--stroke);
+      background: var(--paper3);
+    }
+    .foot{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 16px;
+      flex-wrap:wrap;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .navlinks{ display:none; }
+      .hero-grid{ grid-template-columns: 1fr; }
+      .grid-3{ grid-template-columns: 1fr; }
+      .fact-split{ grid-template-columns: 1fr; gap: 12px; }
+      .fact-rule{ display:none; }
+      .measure-grid{ grid-template-columns: 1fr; }
+      .media-frame{ min-height: 320px; }
+      .quote-wrap{ padding: 60px 0; }
+    }
+
+    /* Mini capability tiles (end of Evaluate) */
+    .mini-nav{
+      margin-top: 18px;
+      padding-top: 18px;
+      border-top: 1px solid rgba(11,18,32,.12);
+    }
+    .mini-grid{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .mini-tile{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(11,18,32,.14);
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 10px 26px rgba(11,18,32,.08);
+      font-weight: 850;
+      font-size: 13px;
+      letter-spacing: .2px;
+      color: rgba(11,18,32,.88);
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      position: relative;
+    }
+    .mini-tile:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.82);
+      border-color: rgba(11,18,32,.24);
+    }
+    .mini-tile .chev{
+      opacity: .55;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+    .mini-tile.is-current{
+      background: rgba(240,238,230,.82);
+      border-color: rgba(11,18,32,.26);
+      box-shadow: 0 12px 30px rgba(11,18,32,.10);
+      cursor: default;
+    }
+    .mini-tile.is-current:hover{ transform:none; background: rgba(240,238,230,.82); }
+    @media (max-width: 980px){
+      .mini-grid{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px){
+      .mini-grid{ grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="topbar">
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#top">
+          <div class="logo"></div>
+          <div>Persisto</div>
+        </a>
+        <nav class="navlinks">
+          <a href="#problem">Problem</a>
+          <a href="#reality">Reality</a>
+          <a href="#change">Change</a>
+          <a href="#measure">Measure</a>
+          <a href="#evaluate">Evaluate</a>
+        </nav>
+        <div class="navcta">
+          <a class="btn" href="persisto-platform">Platform Overview</a>
+          <a class="btn btn-primary" href="#evaluate">Request a Walkthrough</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <main id="top" class="hero band-1">
+    <div class="container">
+      <div class="hero-grid">
+        <div>
+          <span class="kicker">Product</span>
+          <h1>APEX — Algorithmic Pricing & Execution Engine</h1>
+          <p class="lede">
+            Transforms Excel-based rater sheets into high-performance APIs for Straight Through Quoting—without rewriting pricing logic.
+          </p>
+        </div>
+        <div class="media-frame"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- PROBLEM -->
+
+    <section id="problem" class="anchor band-3">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">PROBLEM</span>
+          <h2>The problem APEX solves</h2>
+          <p class="lede" style="margin-top:0;">
+           Pricing logic lives in spreadsheets that were never designed for real-time execution, scale, or governance.
+          </p>
+        </div>
+      </div>
+        
+      <div class="grid-3">
+        <div class="tile">
+          <h3>Spreadsheet dependency</h3>
+          <p>Critical pricing logic lives in Excel files owned by individuals, not systems.</p>
+        </div>
+        <div class="tile">
+          <h3>Manual code translation</h3>
+          <p>Every pricing change requires engineering rework and deployment cycles.</p>
+        </div>
+        <div class="tile">
+          <h3>Untraceable pricing</h3>
+          <p>When prices are questioned, logic cannot be reconstructed reliably.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ <!-- INDUSTRY REALITY BAND -->
+  <section id="reality" class="anchor fact-band" aria-label="Industry reality band">
+    <div class="section-head">
+      <span class="kicker">INDUSTRY REALITY</span>
+    </div>
+
+    <div class="container fact-wrap">
+      <div class="fact-split">
+        <div class="fact-block">
+          <p class="fact">As pricing moves into real-time digital workflows, execution infrastructure—not pricing logic—becomes the primary constraint on scale and consistency.</p>
+          <div class="source">Sources: Gartner Enterprise pricing systems research</div>
+        </div>
+
+        <div class="fact-rule" aria-hidden="true"></div>
+
+        <div class="fact-block">
+          <p class="fact">Digital distribution requires pricing engines capable of deterministic, low-latency execution at scale—spreadsheets are not designed to serve as production pricing infrastructure.</p>
+          <div class="source">— Industry consensus reflected in insurer digital transformation guidance (McKinsey, Deloitte, BCG)</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="section-divider"></div>
+
+  <!-- CHANGE -->
+  <section id="change" class="anchor band-2">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">OPERATING SHIFT</span>
+          <h2>What changes with APEX</h2>
+          <p class="lede" style="margin-top:0;">
+            APEX makes pricing logic explicit at execution time—so quotes are deterministic, fast, and traceable.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div class="tile">
+          <h3>Excel remains the authoring layer</h3>
+          <p>Pricing teams continue working in familiar rater formats.</p>
+        </div>
+        <div class="tile">
+          <h3>Execution becomes automated</h3>
+          <p>Raters compile into deterministic pricing graphs exposed via APIs.</p>
+        </div>
+        <div class="tile">
+          <h3>Pricing becomes consistent</h3>
+          <p>The same logic runs in test, staging, and production.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ 
+<!-- MEASURE -->
+  <section id="measure" class="anchor band-1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <span class="kicker">OUTCOME</span>
+          <h2>What APEX is designed to control</h2>
+          <p class="lede" style="margin-top:0;">
+            APEX controls how pricing logic executes in production—at speed, scale, and with traceability.
+          </p>
+        </div>
+      </div>
+
+      <div class="measure-grid">
+        <div class="tile" style="padding:22px;">
+          <h3 style="margin-top:0;">Core signals</h3>
+          <ul class="bullets">
+<li>Excel rater ingestion and normalization</li>
+        <li>High-performance STQ APIs</li>
+        <li>Versioned pricing logic</li>
+        <li>Reconstructable pricing decisions</li>
+          </ul>
+        </div>
+
+        <aside class="aside">
+          <h3>Where APEX fits</h3>
+          <p style="margin:0; color: rgba(11,18,32,.66); font-size:14px; line-height:1.6;">
+         APEX consumes ARGEN outputs—turning decisioned submissions into real-time, executable pricing for Straight Through Quoting (STQ).
+          </p>
+
+          <div style="margin-top:14px; border-radius:14px; border:1px solid rgba(11,18,32,.12); background: rgba(255,255,255,.55); padding:14px;">
+            <svg viewBox="0 0 360 110" width="100%" height="110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Policy control to risk evaluation flow schematic">
+              <defs>
+                <style>
+                  .b{ fill: rgba(11,18,32,.06); stroke: rgba(11,18,32,.26); stroke-width:1.6; }
+                  .m{ fill: rgba(11,18,32,.12); stroke: rgba(11,18,32,.34); stroke-width:1.8; }
+                  .s{ stroke: rgba(11,18,32,.34); stroke-width:1.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+                </style>
+              </defs>
+              <rect x="18" y="34" width="102" height="42" rx="14" class="m"/>
+              <rect x="140" y="34" width="92" height="42" rx="14" class="b"/>
+              <rect x="250" y="34" width="92" height="42" rx="14" class="b"/>
+              <path class="s" d="M120 55h20"/>
+              <path class="s" d="M232 55h18"/>
+              <path class="s" d="M60 46h50M60 55h62M60 64h54" opacity=".65"/>
+              <path class="s" d="M168 55h36" opacity=".55"/>
+              <path class="s" d="M276 55h40" opacity=".55"/>
+            </svg>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+  
+
+<!-- CTA -->
+<section id="evaluate" class="anchor band-2">
+  <div class="container">
+    <div class="cta">
+      <span class="kicker">Evaluate</span>
+      <h2 style="margin-top:12px;">Evaluate APEX in your pricing workflow</h2>
+      <p>See how APEX turns spreadsheet raters into real-time, bindable pricing for Straight Through Quoting.</p>
+
+      <div class="cta-actions">
+        <a class="btn btn-primary" href="#top">Request a Product Walkthrough</a>
+      </div>
+
+      <!-- Mini navigation to other capabilities -->
+      <div class="mini-nav" aria-label="Explore other Persisto capabilities">
+        <div class="section-head" style="margin-bottom:0;">
+          <span class="kicker">Explore the Persisto suite</span>
+        </div>
+
+        <div class="mini-grid">
+          <a class="mini-tile" href="persisto-platform">
+            <span>Platform Overview</span><span class="chev">›</span>
+          </a>
+
+          <a class="mini-tile" href="persisto-product-1-mark">
+            <span>Submission Intake</span><span class="chev">›</span>
+          </a>
+
+          <a class="mini-tile" href="persisto-product-2-sia">
+            <span>Risk Data Enrichment</span><span class="chev">›</span>
+          </a>
+
+          <a class="mini-tile" href="persisto-product-3-vera">
+            <span>Underwriting Policy Control</span><span class="chev">›</span>
+          </a>
+
+          <a class="mini-tile" href="persisto-product-3-argen">
+            <span>Decision Governance</span><span class="chev">›</span>
+          </a>
+
+          <div class="mini-tile is-current" aria-current="page">
+            <span>Pricing Execution (APEX)</span><span class="chev">•</span>
+          </div>
+
+          <a class="mini-tile" href="persisto-product-4-sandy">
+            <span>Underwriter Assistant</span><span class="chev">›</span>
+          </a>
+
+          <a class="mini-tile" href="persisto-product-5-amy">
+            <span>Phone Automation</span><span class="chev">›</span>
+          </a>
+
+          <a class="mini-tile" href="persisto-product-6-ava">
+            <span>Client Risk Coach</span><span class="chev">›</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> Persisto. All rights reserved.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>

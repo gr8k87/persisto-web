@@ -761,49 +761,13 @@ section{ padding: 84px 0; }
    PRINCIPLES STRIP — TYPOGRAPHIC, FEDERATO-STYLE
    ========================= */
 
-.principles-strip{
-  padding: 18px 0 22px;   /* tight, inline feel */
-}
-
-.principles{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border-top: 1px solid rgba(11,18,32,.10);
-  border-bottom: 1px solid rgba(11,18,32,.10);
-}
-
-.principles li{
-  padding: 14px 18px 16px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-/* subtle separators */
-.principles li:not(:last-child){
-  border-right: 1px solid rgba(11,18,32,.08);
-}
-
-/* VERB — the authority */
-.principles .verb{
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: .8px;        /* key: separation without size */
-  text-transform: uppercase;
-  color: rgba(11,18,32,.90);
-}
-
-/* DESCRIPTION — restrained, calm */
-.principles .text{
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1.35;
-  color: rgba(11,18,32,.65);
-}
+  /* Principles Strip */
+    .principles-strip{ border-top: 1px solid var(--stroke); border-bottom: 1px solid var(--stroke); padding: 20px 0; }
+    .principles{ display: grid; grid-template-columns: repeat(4, 1fr); list-style: none; padding: 0; margin: 0; }
+    .principles li{ text-align: center; border-right: 1px solid var(--stroke); padding: 10px; }
+    .principles li:last-child{ border-right: none; }
+    .verb{ font-size: 12px; font-weight: 800; text-transform: uppercase; color: var(--ink); display: block; }
+    .text{ font-size: 14px; color: var(--muted); }
 
 /* Mobile: stack, preserve editorial tone */
 @media (max-width: 900px){
@@ -923,9 +887,10 @@ section{ padding: 84px 0; }
         <div class="verb">Institutionalize</div>
         <div class="text">Underwriting Guidance in Real Time</div>
       </li>
+      <li><span class="verb">Automate</span><span class="text">Pricing Execution</span></li>
       <li>
         <div class="verb">Deliver</div>
-<div class="text">Portfolio Outcomes Aligned to Strategy</div>      </li>
+<div class="text">Strategy-Aligned Portfolio Outcomes</div>      </li>
     </ul>
   </div>
 </div>
@@ -1319,6 +1284,56 @@ section{ padding: 84px 0; }
           </p>
         </article>
 
+         <article class="suite">
+
+          <div class="media-frame media-card">
+   <!-- SVG: PRICE — Dynamic Rater Ingestion
+ -->
+<svg viewBox="0 0 320 120" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     aria-label="Apex: Automated Pricing and Execution Flow">
+  <defs>
+    <style>
+      .stroke{ stroke: rgba(11,18,32,.45); stroke-width:1.8; fill:none; }
+      .fill-light{ fill: rgba(11,18,32,.05); stroke: rgba(11,18,32,.25); stroke-width:1.4; }
+      .fill-node{ fill: rgba(11,18,32,.08); }
+      .line-connector{ stroke: rgba(11,18,32,.35); stroke-width:1.4; stroke-dasharray: 4 2; }
+      .accent-line{ stroke: rgba(11,18,32,.6); stroke-width:1.8; }
+    </style>
+  </defs>
+
+  <rect x="20" y="25" width="80" height="70" rx="6" class="fill-light"/>
+  <line x1="20" y1="42" x2="100" y2="42" class="line-connector" style="stroke-dasharray: 0;"/>
+  <line x1="46" y1="25" x2="46" y2="95" class="line-connector" style="stroke-dasharray: 0;"/>
+  <rect x="54" y="50" width="20" height="6" rx="2" class="fill-node"/>
+  <rect x="54" y="65" width="30" height="6" rx="2" class="fill-node"/>
+
+  <circle cx="160" cy="35" r="12" class="fill-node"/>
+  <circle cx="160" cy="85" r="12" class="fill-node"/>
+  <path d="M100 60 L148 35 M100 60 L148 85" class="line-connector" />
+  
+  <line x1="156" y1="35" x2="164" y2="35" class="accent-line"/>
+  <line x1="160" y1="31" x2="160" y2="39" class="accent-line"/>
+  <line x1="156" y1="85" x2="164" y2="85" class="accent-line"/>
+
+  <rect x="220" y="35" width="80" height="50" rx="8" class="fill-light" style="fill: rgba(11,18,32,.08); stroke: rgba(11,18,32,.45);"/>
+  <path d="M172 35 L220 50 M172 85 L220 70" class="line-connector" />
+  
+  <text x="242" y="70" font-family="sans-serif" font-size="24" font-weight="bold" fill="rgba(11,18,32,.6)">$</text>
+  <line x1="265" y1="55" x2="285" y2="55" class="accent-line"/>
+  <line x1="265" y1="65" x2="280" y2="65" class="accent-line"/>
+</svg>
+
+
+          </div>
+
+          <div class="pill">APEX - Algorithmic Pricing and Execution Engine</div>
+          <h3 class="tile-title">Dynamic Rater Ingestion</h3>
+          <p class="tile-text">
+Transforms Excel rater sheets into high-performance APIs for Straight Through Quoting (STQ).          </p>
+        </article>
+
         <article class="suite">
 
           <div class="media-frame media-card">
@@ -1470,11 +1485,58 @@ section{ padding: 84px 0; }
           </div>
 
           <div class="pill">Ava — Client Risk Coach</div>
-          <h3 class="tile-title">Actionable Risk Guidance for Insureds</h3>
+          <h3 class="tile-title">Actionable Risk Guidance for Insurers</h3>
           <p class="tile-text">
             Translates underwriting insights into clear recommendations that help insureds reduce risk and support stronger renewals and pricing discussions.
           </p>
         </article>
+
+
+<article class="suite">
+
+          <div class="media-frame media-card">
+         <!-- SVG: VERA — Verification and Risk Audit Trail -->
+<svg viewBox="0 0 320 120" width="100%" height="100%"
+     xmlns="http://www.w3.org/2000/svg"
+     role="img"
+     aria-label="Vera: Verification and Risk Audit Trail">
+  <defs>
+    <style>
+      .stroke{ stroke: rgba(11,18,32,.45); stroke-width:1.8; fill:none; }
+      .fill-light{ fill: rgba(11,18,32,.05); stroke: rgba(11,18,32,.25); stroke-width:1.4; }
+      .fill-node{ fill: rgba(11,18,32,.08); }
+      .line-connector{ stroke: rgba(11,18,32,.35); stroke-width:1.4; }
+      .audit-dot{ fill: rgba(11,18,32,.6); }
+    </style>
+  </defs>
+
+  <line x1="30" y1="60" x2="290" y2="60" class="line-connector" style="stroke-dasharray: 4 4;" />
+
+  <rect x="40" y="45" width="30" height="30" rx="4" class="fill-light"/>
+  <circle cx="55" cy="60" r="4" class="audit-dot"/>
+
+  <rect x="110" y="45" width="30" height="30" rx="4" class="fill-light"/>
+  <circle cx="125" cy="60" r="4" class="audit-dot"/>
+
+  <rect x="180" y="45" width="30" height="30" rx="4" class="fill-light"/>
+  <circle cx="195" cy="60" r="4" class="audit-dot"/>
+
+  <path d="M250 60 L260 70 L280 50" class="stroke" style="stroke: rgba(46,111,126,.8); stroke-width: 3;"/>
+  
+  <text x="40" y="90" font-family="sans-serif" font-size="10" fill="rgba(11,18,32,.5)">Ingested</text>
+  <text x="110" y="90" font-family="sans-serif" font-size="10" fill="rgba(11,18,32,.5)">Rated</text>
+  <text x="180" y="90" font-family="sans-serif" font-size="10" fill="rgba(11,18,32,.5)">Decisioned</text>
+</svg>
+
+
+          </div>
+
+          <div class="pill">Vera - Verification Engine</div>
+          <h3 class="tile-title">Decision Reconstruction</h3>
+          <p class="tile-text">
+Provides an immutable audit trail for every quote, ensuring 100% regulatory compliance and transparency.          </p>
+        </article>
+
       </div>
     </div>
   </section>
